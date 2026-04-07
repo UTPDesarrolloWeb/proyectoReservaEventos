@@ -28,25 +28,25 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // 1. Obtener el header Authorization
+        // Obtenemos el encabezado de autorización de la petición
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String email = null;
 
-        // 2. Verificar que el header tenga el formato "Bearer TOKEN"
+        // Verificamos que el encabezado tenga el formato correcto con Bearer
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             email = jwtUtil.extractEmail(token);
         }
 
-        // 3. Si hay email y no hay sesión activa aún
+        // Si se encontró un email y el usuario aún no está autenticado en la sesión actual
         if (email != null && SecurityContextHolder.getContext()
                 .getAuthentication() == null) {
 
             UserDetails userDetails = userDetailsService
                     .loadUserByUsername(email);
 
-            // 4. Validar el token
+            // Validamos que el token sea auténtico y no haya expirado
             if (jwtUtil.validateToken(token, userDetails.getUsername())) {
 
                 UsernamePasswordAuthenticationToken authToken =
@@ -61,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                 .buildDetails(request)
                 );
 
-                // 5. Registrar la autenticación en Spring Security
+                // Registramos al usuario como autenticado en el contexto de Spring Security
                 SecurityContextHolder.getContext()
                         .setAuthentication(authToken);
             }
