@@ -48,7 +48,7 @@ public class PlanService {
         return planRepository.save(plan);
     }
 
-    // Desactiva el plan - udo del Admin
+    // Desactiva el plan - uso del Admin
     public void desactivarPlan(Long id) {
         Plan plan = obtenerPlanPorId(id);
         plan.setActivo(false);
