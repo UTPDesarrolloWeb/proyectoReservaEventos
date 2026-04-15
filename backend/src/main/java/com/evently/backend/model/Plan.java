@@ -32,4 +32,8 @@ public class Plan {
 
     @Column(nullable = false)
     private Boolean activo = true;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String descripcion;
 }
