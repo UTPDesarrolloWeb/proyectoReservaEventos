@@ -52,6 +52,7 @@ public class OrganizadorController {
 
     // Cambiar de plan
     @PutMapping("/cambiar-plan/{tipoPlan}")
+    @PreAuthorize("hasRole('ORGANIZADOR')")
     public ResponseEntity<Organizador> cambiarPlan(
             @PathVariable TipoPlan tipoPlan,
             Authentication authentication) {
