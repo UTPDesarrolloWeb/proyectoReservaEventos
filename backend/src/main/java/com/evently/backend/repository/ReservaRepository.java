@@ -22,4 +22,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     // Verificar si un cliente ya reservó un evento
     Boolean existsByClienteAndEvento(Usuario cliente, Evento evento);
+
+    List<Reserva> findByEstado(EstadoReserva estado);
 }
