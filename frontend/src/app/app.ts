@@ -1,12 +1,23 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  standalone: true,
+  imports: [RouterOutlet, NavbarComponent],
+  template: `
+    <app-navbar></app-navbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  `,
+  styles: [`
+    main {
+      min-height: calc(100vh - 64px);
+    }
+  `]
 })
 export class App {
-  protected readonly title = signal('frontend');
+  title = 'evently';
 }
