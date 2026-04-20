@@ -1,5 +1,6 @@
 package com.evently.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +28,7 @@ public class Usuario {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @NotBlank
     @Column(nullable = false)
     private String password;

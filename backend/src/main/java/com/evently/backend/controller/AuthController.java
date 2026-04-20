@@ -2,20 +2,26 @@ package com.evently.backend.controller;
 
 import com.evently.backend.dto.LoginRequest;
 import com.evently.backend.dto.RegisterRequest;
+import com.evently.backend.model.Usuario;
+import com.evently.backend.repository.UsuarioRepository;
 import com.evently.backend.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
+
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(
@@ -27,5 +33,36 @@ public class AuthController {
     public ResponseEntity<Map<String, Object>> login(
             @Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    // Ver perfil - cualquier usuario autenticado
+    @GetMapping("/perfil")
+    public ResponseEntity<Usuario> miPerfil(
+            Authentication authentication) {
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(usuario);
+    }
+
+    // Editar perfil - cualquier usuario autenticado
+    @PutMapping("/perfil")
+    public ResponseEntity<Usuario> editarPerfil(
+            @RequestBody Usuario usuarioActualizado,
+            Authentication authentication) {
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        usuario.setNombre(usuarioActualizado.getNombre());
+        usuario.setApellido(usuarioActualizado.getApellido());
+
+        return ResponseEntity.ok(
+                usuarioRepository.save(usuario));
     }
 }

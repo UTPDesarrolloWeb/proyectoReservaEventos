@@ -10,18 +10,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/organizadores")
 @CrossOrigin(origins = "*")
 public class OrganizadorController {
+
     @Autowired
     private OrganizadorService organizadorService;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Registra como organizador eligiendo un plan
+    // Registrar como organizador eligiendo un plan
     @PostMapping("/registrar/{tipoPlan}")
     @PreAuthorize("hasRole('ORGANIZADOR')")
     public ResponseEntity<Organizador> registrar(
@@ -30,7 +33,8 @@ public class OrganizadorController {
 
         Usuario usuario = usuarioRepository
                 .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
 
         return ResponseEntity.ok(
                 organizadorService.registrarOrganizador(
@@ -39,15 +43,28 @@ public class OrganizadorController {
 
     // Ver mi perfil de organizador
     @GetMapping("/mi-perfil")
-    public ResponseEntity<Organizador> miPerfil(
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    public ResponseEntity<Map<String, Object>> miPerfil(
             Authentication authentication) {
 
         Usuario usuario = usuarioRepository
                 .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
 
-        return ResponseEntity.ok(
-                organizadorService.obtenerPorUsuario(usuario));
+        Organizador organizador = organizadorService
+                .obtenerPorUsuario(usuario);
+
+        Map<String, Object> perfil = new HashMap<>();
+        perfil.put("nombre", usuario.getNombre());
+        perfil.put("apellido", usuario.getApellido());
+        perfil.put("email", usuario.getEmail());
+        perfil.put("plan", organizador.getPlan().getNombre());
+        perfil.put("eventosCreados", organizador.getEventosCreados());
+        perfil.put("fechaVencimientoPlan",
+                organizador.getFechaVencimientoPlan());
+
+        return ResponseEntity.ok(perfil);
     }
 
     // Cambiar de plan
@@ -59,7 +76,8 @@ public class OrganizadorController {
 
         Usuario usuario = usuarioRepository
                 .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
 
         Organizador organizador = organizadorService
                 .obtenerPorUsuario(usuario);
