@@ -2,5 +2,7 @@ package com.evently.backend.model;
 
 public enum MetodoPago {
     STRIPE,
-    PAYPAL
+    PAYPAL,
+    YAPE,
+    PLIN
 }
