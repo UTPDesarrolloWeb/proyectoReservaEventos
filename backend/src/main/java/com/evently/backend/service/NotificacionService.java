@@ -4,6 +4,7 @@ import com.evently.backend.model.Notificacion;
 import com.evently.backend.model.TipoNotificacion;
 import com.evently.backend.model.Usuario;
 import com.evently.backend.repository.NotificacionRepository;
+import com.evently.backend.websocket.NotificacionSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class NotificacionService {
     @Autowired
     private NotificacionRepository notificacionRepository;
 
+    @Autowired
+    private NotificacionSocket notificacionSocket;
+
     // Envia la notificación
     public Notificacion enviarNotificacion(Usuario usuario,
                                            String mensaje,
@@ -23,7 +27,14 @@ public class NotificacionService {
         notificacion.setMensaje(mensaje);
         notificacion.setTipo(tipo);
         notificacion.setLeida(false);
-        return notificacionRepository.save(notificacion);
+
+        Notificacion guardada = notificacionRepository.save(notificacion);
+
+        // Enviar en tiempo real via WebSocket
+        notificacionSocket.enviarNotificacionUsuario(
+                usuario.getId(), mensaje);
+
+        return guardada;
     }
 
     // Lista las notificaciones del usuario
