@@ -3,6 +3,7 @@ package com.evently.backend.controller;
 import com.evently.backend.model.EstadoPago;
 import com.evently.backend.model.MetodoPago;
 import com.evently.backend.model.Pago;
+import com.evently.backend.service.PDFService;
 import com.evently.backend.service.PagoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,9 @@ import java.util.UUID;
 public class PagoController {
     @Autowired
     private PagoService pagoService;
+
+    @Autowired
+    private PDFService pdfService;
 
     // Procesa el pago - uso del cliente
     @PostMapping("/procesar/{reservaId}")
@@ -60,5 +64,20 @@ public class PagoController {
 
         return ResponseEntity.ok(
                 pagoService.listarPagosPorEstado(estado));
+    }
+
+    // Descargar boleta de pago
+    @GetMapping("/boleta/{reservaId}")
+    public ResponseEntity<byte[]> descargarBoleta(
+            @PathVariable Long reservaId) {
+
+        Pago pago = pagoService.obtenerPagoPorReserva(reservaId);
+        byte[] pdf = pdfService.generarBoletaPago(pago);
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/pdf")
+                .header("Content-Disposition",
+                        "attachment; filename=boleta-" + reservaId + ".pdf")
+                .body(pdf);
     }
 }
