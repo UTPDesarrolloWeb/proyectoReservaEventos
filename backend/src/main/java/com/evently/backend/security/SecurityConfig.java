@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/eventos/publicos/**").permitAll()
                         .requestMatchers("/api/eventos/buscar/**").permitAll()
+                        .requestMatchers("/api/planes").permitAll()
                         // Todo lo demás necesita token
                         .anyRequest().authenticated()
                 )

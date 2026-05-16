@@ -5,6 +5,7 @@ import com.evently.backend.repository.EventoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,7 +22,14 @@ public class EventoService {
         Organizador organizador = organizadorService
                 .obtenerPorUsuario(usuario);
 
-        // Verifica el límite de eventos según el plan establecido
+        // Verificar que el plan no haya vencido
+        if (organizador.getFechaVencimientoPlan()
+                .isBefore(LocalDateTime.now())) {
+            throw new RuntimeException(
+                    "Tu plan ha vencido. Renuévalo para crear eventos.");
+        }
+
+        // Verificar límite de eventos según el plan
         if (!organizadorService.puedeCrearEvento(organizador)) {
             throw new RuntimeException(
                     "Límite de eventos alcanzado. Mejora tu plan.");
@@ -30,7 +38,6 @@ public class EventoService {
         evento.setOrganizador(organizador);
         evento.setEstado(EstadoEvento.BORRADOR);
 
-        // Incrementa el contador de eventos creados - importante para su gestion por planes
         organizador.setEventosCreados(
                 organizador.getEventosCreados() + 1);
 
@@ -42,6 +49,13 @@ public class EventoService {
 
         Evento evento = obtenerPorId(eventoId);
         verificarPropietario(evento, usuario);
+
+        // Verificar que el plan no haya vencido
+        if (evento.getOrganizador().getFechaVencimientoPlan()
+                .isBefore(LocalDateTime.now())) {
+            throw new RuntimeException(
+                    "Tu plan ha vencido. Renuévalo para publicar eventos.");
+        }
 
         if (evento.getEstado() != EstadoEvento.BORRADOR) {
             throw new RuntimeException(

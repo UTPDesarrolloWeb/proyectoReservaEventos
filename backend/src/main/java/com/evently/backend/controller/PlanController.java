@@ -4,6 +4,7 @@ import com.evently.backend.model.Plan;
 import com.evently.backend.service.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,5 +47,12 @@ public class PlanController {
     public ResponseEntity<String> desactivarPlan(@PathVariable Long id) {
         planService.desactivarPlan(id);
         return ResponseEntity.ok("Plan desactivado correctamente");
+    }
+
+    // Reactivamos el plan - uso del admin
+    @PutMapping("/{id}/reactivar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Plan> reactivarPlan(@PathVariable Long id) {
+        return ResponseEntity.ok(planService.reactivarPlan(id));
     }
 }

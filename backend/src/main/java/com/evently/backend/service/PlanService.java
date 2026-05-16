@@ -54,4 +54,11 @@ public class PlanService {
         plan.setActivo(false);
         planRepository.save(plan);
     }
+
+    // Reactivar plan existente
+    public Plan reactivarPlan(Long id) {
+        Plan plan = obtenerPlanPorId(id);
+        plan.setActivo(true);
+        return planRepository.save(plan);
+    }
 }
