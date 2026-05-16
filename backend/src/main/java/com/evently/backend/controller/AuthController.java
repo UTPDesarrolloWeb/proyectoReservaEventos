@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -22,6 +24,15 @@ public class AuthController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    // Cerrar sesión
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logout() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", "Sesión cerrada exitosamente");
+        response.put("instruccion", "Elimina el token del almacenamiento local");
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(

@@ -49,6 +49,10 @@ public class Evento {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private CategoriaEvento categoria;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EstadoEvento estado = EstadoEvento.BORRADOR;
 
     @Column(nullable = false)

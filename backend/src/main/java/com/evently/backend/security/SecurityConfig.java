@@ -37,6 +37,7 @@ public class SecurityConfig {
                         // Rutas públicas — no necesitan token
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/eventos/publicos/**").permitAll()
+                        .requestMatchers("/api/eventos/buscar/**").permitAll()
                         // Todo lo demás necesita token
                         .anyRequest().authenticated()
                 )

@@ -116,4 +116,15 @@ public class EventoService {
                     "No tienes permiso para modificar este evento");
         }
     }
+    // Trae los próximos 12 eventos para mostrar en la portada
+    public List<Evento> listarEventosPortada() {
+        return eventoRepository.findTop12ByEstadoOrderByFechaEventoAsc(
+                EstadoEvento.PUBLICADO);
+    }
+
+    // Busca eventos con filtros opcionales de título, lugar y categoría
+    public List<Evento> buscarEventos(String titulo, String lugar, CategoriaEvento categoria) {
+        String categoriaStr = categoria != null ? categoria.name() : null;
+        return eventoRepository.buscarEventosPublicos(titulo, lugar, categoriaStr);
+    }
 }

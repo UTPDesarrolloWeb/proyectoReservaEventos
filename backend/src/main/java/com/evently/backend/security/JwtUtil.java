@@ -14,7 +14,7 @@ public class JwtUtil {
     private final String SECRET_KEY = "evently_eventos_secrets_02026_segura";
 
     // Tiempo de expiración: 24 horas
-    private final long EXPIRATION_TIME = 86400000;
+    private final long EXPIRATION_TIME = 3600000;
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());

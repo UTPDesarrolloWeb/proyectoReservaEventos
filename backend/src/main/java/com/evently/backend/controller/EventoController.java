@@ -1,5 +1,6 @@
 package com.evently.backend.controller;
 
+import com.evently.backend.model.CategoriaEvento;
 import com.evently.backend.model.Evento;
 import com.evently.backend.model.Usuario;
 import com.evently.backend.repository.UsuarioRepository;
@@ -25,7 +26,7 @@ public class EventoController {
     // Lista los eventos públicos
     @GetMapping("/publicos")
     public ResponseEntity<List<Evento>> listarPublicos() {
-        return ResponseEntity.ok(eventoService.listarEventosPublicos());
+        return ResponseEntity.ok(eventoService.listarEventosPortada());
     }
 
     // Vee los detalle de un evento
@@ -90,6 +91,17 @@ public class EventoController {
 
         return ResponseEntity.ok(
                 eventoService.editarEvento(id, evento, usuario));
+    }
+
+    // Búsqueda con filtros opcionales de título, lugar y categoría
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Evento>> buscarEventos(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String lugar,
+            @RequestParam(required = false) CategoriaEvento categoria) {
+
+        return ResponseEntity.ok(
+                eventoService.buscarEventos(titulo, lugar, categoria));
     }
 
     // Mis eventos - uso del Organizador
