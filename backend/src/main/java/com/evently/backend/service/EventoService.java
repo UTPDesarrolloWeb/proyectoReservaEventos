@@ -2,6 +2,7 @@ package com.evently.backend.service;
 
 import com.evently.backend.model.*;
 import com.evently.backend.repository.EventoRepository;
+import com.evently.backend.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ public class EventoService {
 
     @Autowired
     private OrganizadorService organizadorService;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     // Crea el evento
     public Evento crearEvento(Evento evento, Usuario usuario) {
@@ -164,6 +168,37 @@ public class EventoService {
         estadistica.put("estado", evento.getEstado());
 
         return estadistica;
+    }
+
+    // Recomendación de eventos basada en historial del cliente
+    public List<Evento> recomendarEventos(Usuario cliente) {
+
+        // Obtener reservas del cliente
+        List<Reserva> reservas = reservaRepository.findByCliente(cliente);
+
+        if (reservas.isEmpty()) {
+            // Sin historial → devolver los próximos 6 eventos
+            return eventoRepository
+                    .findTop12ByEstadoOrderByFechaEventoAsc(
+                            EstadoEvento.PUBLICADO)
+                    .stream()
+                    .limit(6)
+                    .collect(java.util.stream.Collectors.toList());
+        }
+
+        // Obtener la categoría más reservada
+        CategoriaEvento categoriaFavorita = reservas.stream()
+                .map(r -> r.getEvento().getCategoria())
+                .collect(java.util.stream.Collectors.groupingBy(
+                        c -> c, java.util.stream.Collectors.counting()))
+                .entrySet().stream()
+                .max(java.util.Map.Entry.comparingByValue())
+                .map(java.util.Map.Entry::getKey)
+                .orElse(null);
+
+        // Buscar eventos de esa categoría
+        return eventoRepository.findRecomendados(
+                categoriaFavorita, cliente);
     }
 
 }

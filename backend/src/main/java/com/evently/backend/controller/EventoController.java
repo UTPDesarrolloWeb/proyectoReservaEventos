@@ -133,4 +133,19 @@ public class EventoController {
         return ResponseEntity.ok(
                 eventoService.estadisticaOcupacion(id, usuario));
     }
+
+    // Recomendación de eventos- uso del CLIENTE
+    @GetMapping("/recomendados")
+    @PreAuthorize("hasRole('CLIENTE')")
+    public ResponseEntity<List<Evento>> recomendados(
+            Authentication authentication) {
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                eventoService.recomendarEventos(usuario));
+    }
 }

@@ -1,9 +1,6 @@
 package com.evently.backend.repository;
 
-import com.evently.backend.model.CategoriaEvento;
-import com.evently.backend.model.Evento;
-import com.evently.backend.model.EstadoEvento;
-import com.evently.backend.model.Organizador;
+import com.evently.backend.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,4 +30,13 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
             @Param("titulo") String titulo,
             @Param("lugar") String lugar,
             @Param("categoria") String categoria);
+
+    // Busca eventos de la misma categoría excluyendo los ya reservados
+    @Query("SELECT e FROM Evento e WHERE e.estado = 'PUBLICADO' " +
+            "AND e.categoria = :categoria " +
+            "AND e.id NOT IN " +
+            "(SELECT r.evento.id FROM Reserva r WHERE r.cliente = :cliente)")
+    List<Evento> findRecomendados(
+            @Param("categoria") CategoriaEvento categoria,
+            @Param("cliente") Usuario cliente);
 }
