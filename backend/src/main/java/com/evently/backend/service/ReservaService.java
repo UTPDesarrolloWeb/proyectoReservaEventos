@@ -15,6 +15,9 @@ public class ReservaService {
     @Autowired
     private EventoService eventoService;
 
+    @Autowired
+    private QRService qrService;
+
     public Reserva crearReserva(Long eventoId, int cantidadEntradas,
                                 Usuario cliente) {
 
@@ -62,6 +65,18 @@ public class ReservaService {
     public Reserva confirmarReserva(Long reservaId) {
         Reserva reserva = obtenerPorId(reservaId);
         reserva.setEstado(EstadoReserva.CONFIRMADA);
+
+        // Generar QR con los datos de la reserva
+        String contenidoQR = String.format(
+                "EVENTLY|RESERVA:%d|EVENTO:%s|CLIENTE:%s|ENTRADAS:%d|MONTO:%.2f",
+                reserva.getId(),
+                reserva.getEvento().getTitulo(),
+                reserva.getCliente().getEmail(),
+                reserva.getCantidadEntradas(),
+                reserva.getMontoTotal()
+        );
+
+        reserva.setCodigoQR(qrService.generarQR(contenidoQR));
         return reservaRepository.save(reserva);
     }
 

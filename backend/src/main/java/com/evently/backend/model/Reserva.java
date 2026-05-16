@@ -28,7 +28,7 @@ public class Reserva {
     @Column(nullable = false)
     private EstadoReserva estado = EstadoReserva.PENDIENTE;
 
-    @Column(unique = true)
+    @Column(unique = true, columnDefinition = "TEXT")
     private String codigoQR;
 
     @Column(nullable = false)
