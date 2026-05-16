@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EventoService {
@@ -141,4 +143,27 @@ public class EventoService {
         String categoriaStr = categoria != null ? categoria.name() : null;
         return eventoRepository.buscarEventosPublicos(titulo, lugar, categoriaStr);
     }
+
+    // Funcion Logica
+    // Estadística de ocupación de un evento
+    public Map<String, Object> estadisticaOcupacion(Long eventoId,
+                                                    Usuario usuario) {
+        Evento evento = obtenerPorId(eventoId);
+        verificarPropietario(evento, usuario);
+
+        int vendidas = evento.getAforo() - evento.getAforoDisponible();
+        double porcentaje = ((double) vendidas / evento.getAforo()) * 100;
+
+        Map<String, Object> estadistica = new HashMap<>();
+        estadistica.put("evento", evento.getTitulo());
+        estadistica.put("aforoTotal", evento.getAforo());
+        estadistica.put("entradasVendidas", vendidas);
+        estadistica.put("aforoDisponible", evento.getAforoDisponible());
+        estadistica.put("porcentajeOcupacion",
+                String.format("%.1f%%", porcentaje));
+        estadistica.put("estado", evento.getEstado());
+
+        return estadistica;
+    }
+
 }

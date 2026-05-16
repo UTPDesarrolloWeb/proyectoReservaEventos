@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/eventos")
@@ -115,5 +116,21 @@ public class EventoController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         return ResponseEntity.ok(eventoService.listarMisEventos(usuario));
+    }
+
+    // Estadística de ocupación - solo ORGANIZADOR
+    @GetMapping("/{id}/estadistica")
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    public ResponseEntity<Map<String, Object>> estadisticaOcupacion(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                eventoService.estadisticaOcupacion(id, usuario));
     }
 }
