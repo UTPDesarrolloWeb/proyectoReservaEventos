@@ -55,6 +55,9 @@ public class OrganizadorController {
         Organizador organizador = organizadorService
                 .obtenerPorUsuario(usuario);
 
+        // Verifica el vencimiento del plan
+        organizadorService.verificarVencimientoPlan(organizador);
+
         Map<String, Object> perfil = new HashMap<>();
         perfil.put("nombre", usuario.getNombre());
         perfil.put("apellido", usuario.getApellido());

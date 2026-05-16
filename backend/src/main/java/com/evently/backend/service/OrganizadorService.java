@@ -1,9 +1,6 @@
 package com.evently.backend.service;
 
-import com.evently.backend.model.Organizador;
-import com.evently.backend.model.Plan;
-import com.evently.backend.model.TipoPlan;
-import com.evently.backend.model.Usuario;
+import com.evently.backend.model.*;
 import com.evently.backend.repository.OrganizadorRepository;
 import com.evently.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +18,10 @@ public class OrganizadorService {
 
     @Autowired
     private PlanService planService;
+
+    @Autowired
+    private NotificacionService notificacionService;
+
 
     // Registra al organizador con su plan elegido
     public Organizador registrarOrganizador(Long usuarioId, TipoPlan tipoPlan) {
@@ -79,5 +80,22 @@ public class OrganizadorService {
         int limite = organizador.getPlan().getLimiteEventos();
         int creados = organizador.getEventosCreados();
         return creados < limite;
+    }
+
+    // Verifica si el plan vence pronto y notifica
+    public void verificarVencimientoPlan(Organizador organizador) {
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime vencimiento = organizador.getFechaVencimientoPlan();
+        long diasRestantes = java.time.temporal.ChronoUnit.DAYS
+                .between(ahora, vencimiento);
+
+        if (diasRestantes <= 7 && diasRestantes >= 0) {
+            notificacionService.enviarNotificacion(
+                    organizador.getUsuario(),
+                    "Tu plan " + organizador.getPlan().getNombre() +
+                            " vence en " + diasRestantes + " días. ¡Renuévalo!",
+                    TipoNotificacion.RECORDATORIO_EVENTO
+            );
+        }
     }
 }
