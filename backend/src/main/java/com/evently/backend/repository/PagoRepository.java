@@ -34,4 +34,7 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     // Pagos completados de los eventos del organizador
     @Query("SELECT p FROM Pago p WHERE p.reserva.evento.organizador = :organizador AND p.estado = 'COMPLETADO'")
     List<Pago> findByOrganizador(@Param("organizador") Organizador organizador);
+
+    // Todos los pagos con paginación
+    Page<Pago> findAll(Pageable pageable);
 }

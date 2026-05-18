@@ -1,10 +1,12 @@
 package com.evently.backend.controller;
 
 import com.evently.backend.model.Organizador;
+import com.evently.backend.model.Pago;
 import com.evently.backend.model.TipoPlan;
 import com.evently.backend.model.Usuario;
 import com.evently.backend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +48,15 @@ public class AdminController {
     public ResponseEntity<Usuario> toggleUsuario(
             @PathVariable Long id) {
         return ResponseEntity.ok(adminService.toggleUsuario(id));
+    }
+
+    // Historial de todos los pagos - solo ADMIN
+    @GetMapping("/pagos")
+    public ResponseEntity<Page<Pago>> historialPagos(
+            @RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(defaultValue = "10") int cantidad) {
+
+        return ResponseEntity.ok(
+                adminService.historialPagos(pagina, cantidad));
     }
 }

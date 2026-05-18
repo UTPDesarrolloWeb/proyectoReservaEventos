@@ -3,7 +3,11 @@ package com.evently.backend.service;
 import com.evently.backend.model.*;
 import com.evently.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,5 +98,13 @@ public class AdminService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         usuario.setActivo(!usuario.getActivo());
         return usuarioRepository.save(usuario);
+    }
+
+    // Historial de todos los pagos
+    public Page<Pago> historialPagos(int pagina, int cantidad) {
+        Pageable pageable = PageRequest.of(
+                pagina, cantidad,
+                Sort.by("fechaPago").descending());
+        return pagoRepository.findAll(pageable);
     }
 }
