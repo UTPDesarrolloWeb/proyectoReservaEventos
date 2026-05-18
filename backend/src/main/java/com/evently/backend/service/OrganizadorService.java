@@ -2,11 +2,15 @@ package com.evently.backend.service;
 
 import com.evently.backend.model.*;
 import com.evently.backend.repository.OrganizadorRepository;
+import com.evently.backend.repository.PagoRepository;
 import com.evently.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrganizadorService {
@@ -21,6 +25,9 @@ public class OrganizadorService {
 
     @Autowired
     private NotificacionService notificacionService;
+
+    @Autowired
+    private PagoRepository pagoRepository;
 
 
     // Registra al organizador con su plan elegido
@@ -97,5 +104,47 @@ public class OrganizadorService {
                     TipoNotificacion.RECORDATORIO_EVENTO
             );
         }
+    }
+
+    // Resumen de ingresos del organizador
+    public Map<String, Object> misIngresos(Usuario usuario) {
+
+        Organizador organizador = obtenerPorUsuario(usuario);
+        List<Pago> pagos = pagoRepository.findByOrganizador(organizador);
+
+        double ingresosBrutos = pagos.stream()
+                .mapToDouble(Pago::getMonto).sum();
+        double comisiones = pagos.stream()
+                .mapToDouble(Pago::getComisionPlataforma).sum();
+        double ingresoNeto = pagos.stream()
+                .mapToDouble(Pago::getMontoOrganizador).sum();
+
+        // Resumen por evento
+        Map<String, Object> porEvento = new java.util.LinkedHashMap<>();
+        pagos.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                        p -> p.getReserva().getEvento().getTitulo()))
+                .forEach((titulo, pagosList) -> {
+                    Map<String, Object> resumen = new java.util.HashMap<>();
+                    resumen.put("entradasVendidas", pagosList.stream()
+                            .mapToInt(p -> p.getReserva()
+                                    .getCantidadEntradas()).sum());
+                    resumen.put("ingresosBrutos", pagosList.stream()
+                            .mapToDouble(Pago::getMonto).sum());
+                    resumen.put("comisiones", pagosList.stream()
+                            .mapToDouble(Pago::getComisionPlataforma).sum());
+                    resumen.put("ingresoNeto", pagosList.stream()
+                            .mapToDouble(Pago::getMontoOrganizador).sum());
+                    porEvento.put(titulo, resumen);
+                });
+
+        Map<String, Object> response = new java.util.HashMap<>();
+        response.put("ingresosBrutosTotales", ingresosBrutos);
+        response.put("comisionesDescontadas", comisiones);
+        response.put("ingresoNetoTotal", ingresoNeto);
+        response.put("totalPagosRecibidos", pagos.size());
+        response.put("detallePorEvento", porEvento);
+
+        return response;
     }
 }

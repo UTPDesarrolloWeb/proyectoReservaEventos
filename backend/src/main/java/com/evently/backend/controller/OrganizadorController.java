@@ -89,4 +89,20 @@ public class OrganizadorController {
                 organizadorService.cambiarPlan(
                         organizador.getId(), tipoPlan));
     }
+
+    // Mis ingresos - uso del ORGANIZADOR
+    @GetMapping("/mis-ingresos")
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    public ResponseEntity<Map<String, Object>> misIngresos(
+            Authentication authentication) {
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                organizadorService.misIngresos(usuario));
+    }
+
 }

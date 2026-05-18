@@ -1,9 +1,6 @@
 package com.evently.backend.repository;
 
-import com.evently.backend.model.Pago;
-import com.evently.backend.model.Reserva;
-import com.evently.backend.model.EstadoPago;
-import com.evently.backend.model.Usuario;
+import com.evently.backend.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,4 +30,8 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     @Query("SELECT p FROM Pago p WHERE p.reserva.cliente = :cliente")
     Page<Pago> findByCliente(@Param("cliente") Usuario cliente,
                              Pageable pageable);
+
+    // Pagos completados de los eventos del organizador
+    @Query("SELECT p FROM Pago p WHERE p.reserva.evento.organizador = :organizador AND p.estado = 'COMPLETADO'")
+    List<Pago> findByOrganizador(@Param("organizador") Organizador organizador);
 }
