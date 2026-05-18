@@ -155,4 +155,39 @@ public class AdminService {
                 Sort.by("fechaCreacion").descending());
         return eventoRepository.findByEstado(estadoEvento, pageable);
     }
+
+    // Organizadores por estado de plan
+    public Map<String, Object> organizadoresPorEstadoPlan() {
+
+        LocalDateTime ahora = LocalDateTime.now();
+
+        List<Organizador> vencidos = organizadorRepository
+                .findByFechaVencimientoPlanBefore(ahora);
+        List<Organizador> activos = organizadorRepository
+                .findByFechaVencimientoPlanAfter(ahora);
+
+        Map<String, Object> response = new java.util.HashMap<>();
+        response.put("totalActivos", activos.size());
+        response.put("totalVencidos", vencidos.size());
+        response.put("organizadoresActivos", activos.stream()
+                .map(o -> {
+                    Map<String, Object> info = new java.util.HashMap<>();
+                    info.put("nombre", o.getUsuario().getNombre());
+                    info.put("email", o.getUsuario().getEmail());
+                    info.put("plan", o.getPlan().getNombre());
+                    info.put("vencimiento", o.getFechaVencimientoPlan());
+                    return info;
+                }).toList());
+        response.put("organizadoresVencidos", vencidos.stream()
+                .map(o -> {
+                    Map<String, Object> info = new java.util.HashMap<>();
+                    info.put("nombre", o.getUsuario().getNombre());
+                    info.put("email", o.getUsuario().getEmail());
+                    info.put("plan", o.getPlan().getNombre());
+                    info.put("vencimiento", o.getFechaVencimientoPlan());
+                    return info;
+                }).toList());
+
+        return response;
+    }
 }

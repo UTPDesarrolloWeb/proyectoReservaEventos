@@ -76,4 +76,11 @@ public class AdminController {
         return ResponseEntity.ok(
                 adminService.eventosPorEstado(estado, pagina, cantidad));
     }
+
+    // Organizadores por estado de plan - uso del admin
+    @GetMapping("/organizadores/estado-plan")
+    public ResponseEntity<Map<String, Object>> organizadoresPorEstadoPlan() {
+        return ResponseEntity.ok(
+                adminService.organizadoresPorEstadoPlan());
+    }
 }
