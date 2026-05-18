@@ -118,7 +118,7 @@ public class EventoController {
         return ResponseEntity.ok(eventoService.listarMisEventos(usuario));
     }
 
-    // Estadística de ocupación - solo ORGANIZADOR
+    // Estadística de ocupación - uso del ORGANIZADOR
     @GetMapping("/{id}/estadistica")
     @PreAuthorize("hasRole('ORGANIZADOR')")
     public ResponseEntity<Map<String, Object>> estadisticaOcupacion(
@@ -134,7 +134,7 @@ public class EventoController {
                 eventoService.estadisticaOcupacion(id, usuario));
     }
 
-    // Recomendación de eventos- uso del CLIENTE
+    // Recomendación de eventos- uso del Cliente
     @GetMapping("/recomendados")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<List<Evento>> recomendados(
@@ -147,5 +147,20 @@ public class EventoController {
 
         return ResponseEntity.ok(
                 eventoService.recomendarEventos(usuario));
+    }
+
+    // Estadísticas globales - uso del Organizador
+    @GetMapping("/mis-estadisticas")
+    @PreAuthorize("hasRole('ORGANIZADOR')")
+    public ResponseEntity<Map<String, Object>> misEstadisticas(
+            Authentication authentication) {
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                eventoService.misEstadisticas(usuario));
     }
 }

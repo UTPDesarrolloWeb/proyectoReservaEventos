@@ -201,4 +201,61 @@ public class EventoService {
                 categoriaFavorita, cliente);
     }
 
+    // Estadísticas globales del organizador
+    public Map<String, Object> misEstadisticas(Usuario usuario) {
+
+        Organizador organizador = organizadorService
+                .obtenerPorUsuario(usuario);
+
+        List<Evento> todosEventos = eventoRepository
+                .findByOrganizador(organizador);
+
+        // Contar por estado
+        long publicados = todosEventos.stream()
+                .filter(e -> e.getEstado() == EstadoEvento.PUBLICADO)
+                .count();
+        long cancelados = todosEventos.stream()
+                .filter(e -> e.getEstado() == EstadoEvento.CANCELADO)
+                .count();
+        long borradores = todosEventos.stream()
+                .filter(e -> e.getEstado() == EstadoEvento.BORRADOR)
+                .count();
+        long finalizados = todosEventos.stream()
+                .filter(e -> e.getEstado() == EstadoEvento.FINALIZADO)
+                .count();
+
+        // Total entradas vendidas
+        int totalVendidas = todosEventos.stream()
+                .mapToInt(e -> e.getAforo() - e.getAforoDisponible())
+                .sum();
+
+        // Evento más popular (mayor entradas vendidas)
+        String eventoMasPopular = todosEventos.stream()
+                .max(java.util.Comparator.comparingInt(
+                        e -> e.getAforo() - e.getAforoDisponible()))
+                .map(Evento::getTitulo)
+                .orElse("Sin eventos");
+
+        // Tasa de ocupación promedio
+        double tasaPromedio = todosEventos.isEmpty() ? 0 :
+                todosEventos.stream()
+                        .mapToDouble(e -> ((double)(e.getAforo() -
+                                e.getAforoDisponible()) / e.getAforo()) * 100)
+                        .average()
+                        .orElse(0);
+
+        Map<String, Object> estadisticas = new java.util.HashMap<>();
+        estadisticas.put("totalEventos", todosEventos.size());
+        estadisticas.put("eventosPublicados", publicados);
+        estadisticas.put("eventosCancelados", cancelados);
+        estadisticas.put("eventosBorradores", borradores);
+        estadisticas.put("eventosFinalizados", finalizados);
+        estadisticas.put("totalEntradasVendidas", totalVendidas);
+        estadisticas.put("eventoMasPopular", eventoMasPopular);
+        estadisticas.put("tasaOcupacionPromedio",
+                String.format("%.1f%%", tasaPromedio));
+
+        return estadisticas;
+    }
+
 }
