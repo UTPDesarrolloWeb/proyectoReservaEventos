@@ -1,9 +1,6 @@
 package com.evently.backend.controller;
 
-import com.evently.backend.model.Organizador;
-import com.evently.backend.model.Pago;
-import com.evently.backend.model.TipoPlan;
-import com.evently.backend.model.Usuario;
+import com.evently.backend.model.*;
 import com.evently.backend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,7 +47,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.toggleUsuario(id));
     }
 
-    // Historial de todos los pagos - solo ADMIN
+    // Historial de todos los pagos - uso del admin
     @GetMapping("/pagos")
     public ResponseEntity<Page<Pago>> historialPagos(
             @RequestParam(defaultValue = "0") int pagina,
@@ -67,5 +64,16 @@ public class AdminController {
 
         return ResponseEntity.ok(
                 adminService.ingresosPorPeriodo(periodo));
+    }
+
+    // Eventos por estado - uso del Admin
+    @GetMapping("/eventos")
+    public ResponseEntity<Page<Evento>> eventosPorEstado(
+            @RequestParam(defaultValue = "PUBLICADO") String estado,
+            @RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(defaultValue = "10") int cantidad) {
+
+        return ResponseEntity.ok(
+                adminService.eventosPorEstado(estado, pagina, cantidad));
     }
 }

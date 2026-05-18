@@ -144,4 +144,15 @@ public class AdminService {
 
         return response;
     }
+
+    // Listar eventos por estado con paginación
+    public Page<Evento> eventosPorEstado(String estado,
+                                         int pagina, int cantidad) {
+        EstadoEvento estadoEvento = EstadoEvento.valueOf(
+                estado.toUpperCase());
+        Pageable pageable = PageRequest.of(
+                pagina, cantidad,
+                Sort.by("fechaCreacion").descending());
+        return eventoRepository.findByEstado(estadoEvento, pageable);
+    }
 }

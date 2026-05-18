@@ -1,6 +1,8 @@
 package com.evently.backend.repository;
 
 import com.evently.backend.model.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,4 +41,7 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
     List<Evento> findRecomendados(
             @Param("categoria") CategoriaEvento categoria,
             @Param("cliente") Usuario cliente);
+
+    // Eventos por estado con paginación
+    Page<Evento> findByEstado(EstadoEvento estado, Pageable pageable);
 }
