@@ -3,11 +3,15 @@ package com.evently.backend.controller;
 import com.evently.backend.model.EstadoPago;
 import com.evently.backend.model.MetodoPago;
 import com.evently.backend.model.Pago;
+import com.evently.backend.model.Usuario;
+import com.evently.backend.repository.UsuarioRepository;
 import com.evently.backend.service.PDFService;
 import com.evently.backend.service.PagoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +25,10 @@ public class PagoController {
 
     @Autowired
     private PDFService pdfService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
 
     // Procesa el pago - uso del cliente
     @PostMapping("/procesar/{reservaId}")
@@ -65,6 +73,24 @@ public class PagoController {
         return ResponseEntity.ok(
                 pagoService.listarPagosPorEstado(estado));
     }
+
+    // Historial de pagos - solo CLIENTE
+    @GetMapping("/mis-pagos")
+    @PreAuthorize("hasRole('CLIENTE')")
+    public ResponseEntity<Page<Pago>> misPagos(
+            @RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(defaultValue = "5") int cantidad,
+            Authentication authentication) {
+
+        Usuario cliente = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                pagoService.misPagos(cliente, pagina, cantidad));
+    }
+
 
     // Descargar boleta de pago
     @GetMapping("/boleta/{reservaId}")

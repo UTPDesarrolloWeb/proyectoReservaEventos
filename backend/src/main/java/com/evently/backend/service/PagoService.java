@@ -3,7 +3,11 @@ package com.evently.backend.service;
 import com.evently.backend.model.*;
 import com.evently.backend.repository.PagoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -98,5 +102,13 @@ public class PagoService {
         return pagoRepository.findByReserva(reserva)
                 .orElseThrow(() -> new RuntimeException(
                         "Pago no encontrado"));
+    }
+
+    // Historial de pagos del cliente con paginación
+    public Page<Pago> misPagos(Usuario cliente, int pagina, int cantidad) {
+        Pageable pageable = PageRequest.of(
+                pagina, cantidad,
+                Sort.by("fechaPago").descending());
+        return pagoRepository.findByCliente(cliente, pageable);
     }
 }
