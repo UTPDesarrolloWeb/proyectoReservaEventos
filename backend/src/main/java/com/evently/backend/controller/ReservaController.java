@@ -5,6 +5,7 @@ import com.evently.backend.model.Usuario;
 import com.evently.backend.repository.UsuarioRepository;
 import com.evently.backend.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -54,7 +55,7 @@ public class ReservaController {
                 reservaService.cancelarReserva(reservaId, cliente));
     }
 
-    // Mis reservas - uso del cliente
+    // Mis reservas trae todo - uso del cliente
     @GetMapping("/mis-reservas")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<List<Reserva>> misReservas(
@@ -65,6 +66,24 @@ public class ReservaController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         return ResponseEntity.ok(reservaService.misReservas(cliente));
+    }
+
+    // Mis reservas con paginación - uso del cliente
+    @GetMapping("/mis-reservas/paginado")
+    @PreAuthorize("hasRole('CLIENTE')")
+    public ResponseEntity<Page<Reserva>> misReservasPaginadas(
+            @RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(defaultValue = "5") int cantidad,
+            Authentication authentication) {
+
+        Usuario cliente = usuarioRepository
+                .findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException(
+                        "Usuario no encontrado"));
+
+        return ResponseEntity.ok(
+                reservaService.misReservasPaginadas(
+                        cliente, pagina, cantidad));
     }
 
     // Reservas realizadas de un evento - uso del Organizador
@@ -81,4 +100,6 @@ public class ReservaController {
         return ResponseEntity.ok(
                 reservaService.reservasPorEvento(eventoId, organizador));
     }
+
+
 }

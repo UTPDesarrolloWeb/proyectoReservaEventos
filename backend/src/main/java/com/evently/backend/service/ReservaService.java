@@ -3,7 +3,11 @@ package com.evently.backend.service;
 import com.evently.backend.model.*;
 import com.evently.backend.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -132,5 +136,14 @@ public class ReservaService {
         return reservaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(
                         "Reserva no encontrada con id: " + id));
+    }
+
+    // Historial de reservas del cliente con paginación
+    public Page<Reserva> misReservasPaginadas(Usuario cliente,
+                                              int pagina, int cantidad) {
+        Pageable pageable = PageRequest.of(
+                pagina, cantidad,
+                Sort.by("fechaReserva").descending());
+        return reservaRepository.findByCliente(cliente, pageable);
     }
 }

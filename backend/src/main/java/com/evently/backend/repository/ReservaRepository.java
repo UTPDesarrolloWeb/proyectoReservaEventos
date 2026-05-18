@@ -6,6 +6,8 @@ import com.evently.backend.model.Usuario;
 import com.evently.backend.model.EstadoReserva;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -24,4 +26,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     Boolean existsByClienteAndEvento(Usuario cliente, Evento evento);
 
     List<Reserva> findByEstado(EstadoReserva estado);
+
+    // Reservas del cliente con paginación
+    Page<Reserva> findByCliente(Usuario cliente, Pageable pageable);
 }
