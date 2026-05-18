@@ -59,4 +59,13 @@ public class AdminController {
         return ResponseEntity.ok(
                 adminService.historialPagos(pagina, cantidad));
     }
+
+    // Ingresos por periodo - uso del Admin
+    @GetMapping("/ingresos")
+    public ResponseEntity<Map<String, Object>> ingresosPorPeriodo(
+            @RequestParam(defaultValue = "mes") String periodo) {
+
+        return ResponseEntity.ok(
+                adminService.ingresosPorPeriodo(periodo));
+    }
 }

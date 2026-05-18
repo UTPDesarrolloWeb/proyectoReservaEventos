@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 @Service
 public class AdminService {
@@ -31,6 +32,8 @@ public class AdminService {
 
     @Autowired
     private PlanRepository planRepository;
+
+
 
     // Dashboard completo del administrador
     public Map<String, Object> getDashboard() {
@@ -106,5 +109,39 @@ public class AdminService {
                 pagina, cantidad,
                 Sort.by("fechaPago").descending());
         return pagoRepository.findAll(pageable);
+    }
+
+    // Ingresos por periodo
+    public Map<String, Object> ingresosPorPeriodo(String periodo) {
+
+        LocalDateTime fin = LocalDateTime.now();
+        LocalDateTime inicio;
+
+        switch (periodo.toLowerCase()) {
+            case "semana" -> inicio = fin.minusWeeks(1);
+            case "mes"    -> inicio = fin.minusMonths(1);
+            case "anio"   -> inicio = fin.minusYears(1);
+            default       -> inicio = fin.minusMonths(1);
+        }
+
+        List<Pago> pagos = pagoRepository.findByPeriodo(inicio, fin);
+
+        double totalIngresos = pagos.stream()
+                .mapToDouble(Pago::getMonto).sum();
+        double totalComisiones = pagos.stream()
+                .mapToDouble(Pago::getComisionPlataforma).sum();
+        double totalNeto = pagos.stream()
+                .mapToDouble(Pago::getMontoOrganizador).sum();
+
+        Map<String, Object> response = new java.util.HashMap<>();
+        response.put("periodo", periodo);
+        response.put("desde", inicio);
+        response.put("hasta", fin);
+        response.put("totalPagos", pagos.size());
+        response.put("totalIngresos", totalIngresos);
+        response.put("totalComisiones", totalComisiones);
+        response.put("totalNetoOrganizadores", totalNeto);
+
+        return response;
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,4 +39,11 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
 
     // Todos los pagos con paginación
     Page<Pago> findAll(Pageable pageable);
+
+    // Pagos completados por periodo
+    @Query("SELECT p FROM Pago p WHERE p.estado = 'COMPLETADO' " +
+            "AND p.fechaPago >= :inicio AND p.fechaPago <= :fin")
+    List<Pago> findByPeriodo(
+            @Param("inicio") LocalDateTime inicio,
+            @Param("fin") LocalDateTime fin);
 }
