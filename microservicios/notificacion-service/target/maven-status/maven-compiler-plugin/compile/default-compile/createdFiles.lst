@@ -1,0 +1,13 @@
+com\evently\notificacion\dto\UsuarioDTO.class
+com\evently\notificacion\model\Notificacion.class
+com\evently\notificacion\model\TipoNotificacion.class
+com\evently\notificacion\security\JwtUtil.class
+com\evently\notificacion\client\AuthClient.class
+com\evently\notificacion\websocket\WebSocketConfig.class
+com\evently\notificacion\controller\NotificacionController.class
+com\evently\notificacion\NotificacionServiceApplication.class
+com\evently\notificacion\service\NotificacionService.class
+com\evently\notificacion\websocket\NotificacionSocket.class
+com\evently\notificacion\security\JwtFilter.class
+com\evently\notificacion\security\SecurityConfig.class
+com\evently\notificacion\repository\NotificacionRepository.class

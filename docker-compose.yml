@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: ./microservicios/api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8080
+    networks:
+      - evently-network
+
+  auth-service:
+    build:
+      context: ./microservicios/auth-service
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./microservicios/auth-service/.env
+    environment:
+      - SERVER_PORT=8081
+    networks:
+      - evently-network
+
+  evento-service:
+    build:
+      context: ./microservicios/evento-service
+    ports:
+      - "8082:8082"
+    env_file:
+      - ./microservicios/evento-service/.env
+    environment:
+      - SERVER_PORT=8082
+    networks:
+      - evently-network
+
+  reserva-service:
+    build:
+      context: ./microservicios/reserva-service
+    ports:
+      - "8083:8083"
+    env_file:
+      - ./microservicios/reserva-service/.env
+    environment:
+      - SERVER_PORT=8083
+    networks:
+      - evently-network
+
+  pago-service:
+    build:
+      context: ./microservicios/pago-service
+    ports:
+      - "8084:8084"
+    env_file:
+      - ./microservicios/pago-service/.env
+    environment:
+      - SERVER_PORT=8084
+    networks:
+      - evently-network
+
+  notificacion-service:
+    build:
+      context: ./microservicios/notificacion-service
+    ports:
+      - "8085:8085"
+    env_file:
+      - ./microservicios/notificacion-service/.env
+    environment:
+      - SERVER_PORT=8085
+    networks:
+      - evently-network
+
+  admin-service:
+    build:
+      context: ./microservicios/admin-service
+    ports:
+      - "8086:8086"
+    env_file:
+      - ./microservicios/admin-service/.env
+    environment:
+      - SERVER_PORT=8086
+    networks:
+      - evently-network
+
+networks:
+  evently-network:
+    driver: bridge
