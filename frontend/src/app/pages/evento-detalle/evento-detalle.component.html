@@ -1,0 +1,167 @@
+<div class="page">
+
+    <!-- Loading -->
+    <div class="estado-center" *ngIf="loading">
+        <div class="spinner"></div>
+        <p>Cargando evento...</p>
+    </div>
+
+    <!-- Error -->
+    <div class="estado-center" *ngIf="!loading && error">
+        <p class="error-msg">{{ error }}</p>
+        <a routerLink="/eventos" class="btn-back">← Volver a eventos</a>
+    </div>
+
+    <!-- Contenido -->
+    <ng-container *ngIf="!loading && !error && evento">
+
+        <!-- Hero imagen -->
+        <div class="evento-hero">
+            <img *ngIf="evento.imagenUrl" [src]="evento.imagenUrl" [alt]="evento.titulo" />
+            <div class="hero-placeholder" *ngIf="!evento.imagenUrl">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                </svg>
+            </div>
+            <div class="hero-overlay">
+                <a routerLink="/eventos" class="btn-volver">← Volver</a>
+            </div>
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="body-grid">
+
+            <!-- Columna izquierda -->
+            <div class="col-info">
+                <span class="badge-cat">{{ categoriaLabel(evento.categoria) }}</span>
+                <h1>{{ evento.titulo }}</h1>
+                <p class="descripcion">{{ evento.descripcion }}</p>
+
+                <div class="detalles">
+                    <div class="detalle-item">
+                        <div class="detalle-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="detalle-label">Fecha y hora</span>
+                            <span class="detalle-valor">{{ formatearFecha(evento.fechaEvento) }}, {{
+                                formatearHora(evento.fechaEvento) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detalle-item">
+                        <div class="detalle-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="detalle-label">Lugar</span>
+                            <span class="detalle-valor">{{ evento.lugar }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detalle-item">
+                        <div class="detalle-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="detalle-label">Aforo disponible</span>
+                            <span class="detalle-valor">{{ evento.aforoDisponible }} de {{ evento.aforo }}
+                                lugares</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna derecha — Reserva -->
+            <div class="col-reserva">
+                <div class="reserva-card">
+
+                    <!-- Éxito -->
+                    <div class="reserva-exito" *ngIf="reservaExito">
+                        <div class="exito-icon">✅</div>
+                        <h3>¡Reserva realizada!</h3>
+                        <p>Tu reserva fue confirmada. Revisa tus reservas para ver el código QR.</p>
+                        <a routerLink="/reservas" class="btn-primary">Ver mis reservas</a>
+                    </div>
+
+                    <!-- Formulario -->
+                    <ng-container *ngIf="!reservaExito">
+                        <div class="precio-grande">
+                            {{ formatearPrecio(evento.precio) }}
+                            <span *ngIf="evento.precio > 0"> / entrada</span>
+                        </div>
+
+                        <div class="aforo-bar">
+                            <div class="aforo-fill" [style.width.%]="(evento.aforoDisponible / evento.aforo) * 100"
+                                [class.aforo-bajo]="evento.aforoDisponible / evento.aforo < 0.2">
+                            </div>
+                        </div>
+                        <p class="aforo-texto">{{ evento.aforoDisponible }} lugares disponibles</p>
+
+                        <div class="cantidad-field" *ngIf="evento.aforoDisponible > 0">
+                            <label>Cantidad de entradas</label>
+                            <div class="cantidad-control">
+                                <button
+                                    (click)="cantidadEntradas = cantidadEntradas > 1 ? cantidadEntradas - 1 : 1">−</button>
+                                <span>{{ cantidadEntradas }}</span>
+                                <button
+                                    (click)="cantidadEntradas = cantidadEntradas < maxEntradas ? cantidadEntradas + 1 : maxEntradas">+</button>
+                            </div>
+                        </div>
+
+                        <div class="total-row" *ngIf="evento.precio > 0 && evento.aforoDisponible > 0">
+                            <span>Total a pagar</span>
+                            <span class="total-precio">S/ {{ totalPagar.toFixed(2) }}</span>
+                        </div>
+
+                        <div class="reserva-error" *ngIf="reservaError">{{ reservaError }}</div>
+
+                        <!-- Sin aforo -->
+                        <div class="sin-aforo" *ngIf="evento.aforoDisponible === 0">
+                            <p>Evento agotado</p>
+                        </div>
+
+                        <!-- Botón reservar -->
+                        <button class="btn-primary" *ngIf="isLoggedIn && isCliente && evento.aforoDisponible > 0"
+                            (click)="reservar()" [disabled]="reservando">
+                            <span *ngIf="!reservando">Reservar ahora</span>
+                            <span *ngIf="reservando" class="spinner-row">
+                                <span class="spinner-sm"></span> Reservando...
+                            </span>
+                        </button>
+
+                        <!-- No logueado -->
+                        <a routerLink="/login" class="btn-primary" *ngIf="!isLoggedIn">
+                            Inicia sesión para reservar
+                        </a>
+
+                        <!-- No es cliente -->
+                        <div class="rol-info" *ngIf="isLoggedIn && !isCliente">
+                            <p>Solo los clientes pueden realizar reservas.</p>
+                        </div>
+
+                    </ng-container>
+
+                </div>
+            </div>
+
+        </div>
+    </ng-container>
+</div>

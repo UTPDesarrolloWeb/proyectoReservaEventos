@@ -23,6 +23,11 @@ export const routes: Routes = [
       import('./pages/eventos-publicos/eventos-publicos.component').then(m => m.EventosPublicosComponent)
   },
   {
+    path: 'eventos/:id',
+    loadComponent: () =>
+      import('./pages/evento-detalle/evento-detalle.component').then(m => m.EventoDetalleComponent)
+  },
+  {
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () =>

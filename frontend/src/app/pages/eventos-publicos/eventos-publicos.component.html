@@ -1,1 +1,143 @@
-<p>Eventos Publicos</p>
+<div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <h1>Explorar Eventos</h1>
+        <p>Descubre los mejores eventos cerca de ti</p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-bar">
+        <div class="filtros-inner">
+
+            <div class="filtro-group">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#717182" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" placeholder="Buscar evento..." [(ngModel)]="busqueda" (input)="filtrar()" />
+            </div>
+
+            <div class="filtro-group">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#717182" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </svg>
+                <input type="text" placeholder="Lugar..." [(ngModel)]="lugar" (input)="filtrar()" />
+            </div>
+
+            <div class="filtro-group">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#717182" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6" />
+                    <line x1="8" y1="12" x2="21" y2="12" />
+                    <line x1="8" y1="18" x2="21" y2="18" />
+                    <line x1="3" y1="6" x2="3.01" y2="6" />
+                    <line x1="3" y1="12" x2="3.01" y2="12" />
+                    <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg>
+                <select [(ngModel)]="categoria" (change)="filtrar()">
+                    <option value="">Todas las categorías</option>
+                    <option *ngFor="let cat of categorias" [value]="cat">{{ categoriaLabel(cat) }}</option>
+                </select>
+            </div>
+
+            <button class="btn-limpiar" *ngIf="hayFiltros" (click)="limpiarFiltros()">
+                Limpiar filtros
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Contenido -->
+    <div class="contenido">
+
+        <!-- Loading -->
+        <div class="estado-center" *ngIf="loading">
+            <div class="spinner-grande"></div>
+            <p>Cargando eventos...</p>
+        </div>
+
+        <!-- Error -->
+        <div class="estado-center" *ngIf="!loading && error">
+            <div class="error-icon">⚠️</div>
+            <p class="error-msg">{{ error }}</p>
+            <button class="btn-reintentar" (click)="cargarEventos()">Reintentar</button>
+        </div>
+
+        <!-- Sin resultados -->
+        <div class="estado-center" *ngIf="!loading && !error && eventosFiltrados.length === 0">
+            <div class="empty-icon">🔍</div>
+            <p class="empty-msg">No se encontraron eventos</p>
+            <button class="btn-reintentar" *ngIf="hayFiltros" (click)="limpiarFiltros()">Ver todos los eventos</button>
+        </div>
+
+        <!-- Grid de eventos -->
+        <div class="eventos-grid" *ngIf="!loading && !error && eventosFiltrados.length > 0">
+
+            <div class="evento-card" *ngFor="let evento of eventosFiltrados" (click)="verDetalle(evento.id)">
+
+                <!-- Imagen -->
+                <div class="evento-img">
+                    <img *ngIf="evento.imagenUrl" [src]="evento.imagenUrl" [alt]="evento.titulo" />
+                    <div class="evento-img-placeholder" *ngIf="!evento.imagenUrl">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                    </div>
+                    <span class="badge-categoria">{{ categoriaLabel(evento.categoria) }}</span>
+                </div>
+
+                <!-- Info -->
+                <div class="evento-info">
+                    <h3 class="evento-titulo">{{ evento.titulo }}</h3>
+                    <p class="evento-desc">{{ evento.descripcion }}</p>
+
+                    <div class="evento-meta">
+                        <div class="meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#717182"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <span>{{ formatearFecha(evento.fechaEvento) }} · {{ formatearHora(evento.fechaEvento)
+                                }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#717182"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            <span>{{ evento.lugar }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#717182"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                            </svg>
+                            <span>{{ evento.aforoDisponible }} lugares disponibles</span>
+                        </div>
+                    </div>
+
+                    <div class="evento-footer">
+                        <span class="evento-precio">{{ formatearPrecio(evento.precio) }}</span>
+                        <button class="btn-ver" (click)="verDetalle(evento.id); $event.stopPropagation()">
+                            Ver evento
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
