@@ -1,0 +1,517 @@
+.page {
+    min-height: calc(100vh - 64px);
+    background: #f9f9fb;
+}
+
+/* ── Header ── */
+.page-header {
+    background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+    padding: 2.5rem 2rem;
+}
+
+.header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #030213;
+    margin: 0 0 0.25rem;
+}
+
+.page-header p {
+    font-size: 0.9rem;
+    color: #717182;
+    margin: 0;
+}
+
+.btn-explorar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #030213;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.btn-explorar:hover {
+    background: #1a1830;
+}
+
+/* ── Contenido ── */
+.contenido {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ── Stats row ── */
+.stats-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    padding: 6px 16px;
+}
+
+.stat-pill.success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.stat-pill.warning {
+    background: #fef3c7;
+    border-color: #fde68a;
+}
+
+.stat-pill.danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.stat-num {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #030213;
+}
+
+.stat-pill.success .stat-num {
+    color: #16a34a;
+}
+
+.stat-pill.warning .stat-num {
+    color: #d97706;
+}
+
+.stat-pill.danger .stat-num {
+    color: #dc2626;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #717182;
+}
+
+/* ── Alert ── */
+.alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #b91c1c;
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+}
+
+/* ── Filtros ── */
+.filtros {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filtro-btn {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    color: #717182;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.filtro-btn:hover {
+    border-color: rgba(0, 0, 0, 0.25);
+    color: #030213;
+}
+
+.filtro-btn.activo {
+    background: #030213;
+    border-color: #030213;
+    color: #fff;
+}
+
+/* ── Loading ── */
+.loading-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skeleton {
+    height: 140px;
+    background: linear-gradient(90deg, #f3f3f5 25%, #e9e9ec 50%, #f3f3f5 75%);
+    background-size: 200% 100%;
+    border-radius: 12px;
+    animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ── Estados ── */
+.estado-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 2.5rem;
+}
+
+.empty-msg {
+    font-size: 0.95rem;
+    color: #717182;
+    margin: 0;
+}
+
+.error-msg {
+    font-size: 0.95rem;
+    color: #b91c1c;
+    margin: 0;
+}
+
+.btn-reintentar {
+    background: #030213;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.btn-reintentar:hover {
+    background: #1a1830;
+}
+
+/* ── Lista ── */
+.reservas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ── Card ── */
+.reserva-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Top */
+.reserva-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.reserva-id-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+
+.reserva-icon {
+    width: 40px;
+    height: 40px;
+    background: #eff6ff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.reserva-id {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #030213;
+    margin: 0 0 3px;
+}
+
+.reserva-fecha {
+    font-size: 0.8rem;
+    color: #717182;
+    margin: 0;
+}
+
+/* Badges */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.badge-success {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.badge-warning {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.badge-danger {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.badge-default {
+    background: #f3f3f5;
+    color: #717182;
+}
+
+/* Detalles */
+.reserva-detalles {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: #f9f9fb;
+    border-radius: 8px;
+}
+
+.detalle {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.detalle-label {
+    font-size: 0.75rem;
+    color: #717182;
+}
+
+.detalle-valor {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #030213;
+}
+
+.detalle-valor.precio {
+    color: #2563eb;
+}
+
+/* Acciones */
+.reserva-acciones {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 1rem;
+}
+
+.btn-qr {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.btn-qr:hover {
+    background: #dcfce7;
+}
+
+.btn-ver-evento {
+    background: #f3f3f5;
+    color: #030213;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+
+.btn-ver-evento:hover {
+    background: #e9e9ec;
+}
+
+.btn-cancelar {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-left: auto;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+    background: #fee2e2;
+}
+
+.btn-cancelar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.spinner-sm {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(220, 38, 38, 0.3);
+    border-top-color: #dc2626;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── Modal QR ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 1rem;
+}
+
+.modal-card {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 360px;
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.modal-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #030213;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #717182;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.modal-close:hover {
+    background: #f3f3f5;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.qr-img {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.qr-hint {
+    font-size: 0.8rem;
+    color: #717182;
+    text-align: center;
+    margin: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .contenido {
+        padding: 1rem;
+    }
+
+    .reserva-detalles {
+        gap: 1rem;
+    }
+
+    .btn-cancelar {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+}

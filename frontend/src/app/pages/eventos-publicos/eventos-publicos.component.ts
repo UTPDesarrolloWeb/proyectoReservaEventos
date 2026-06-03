@@ -103,10 +103,10 @@ export class EventosPublicosComponent implements OnInit {
 
   categoriaLabel(cat: string): string {
     const labels: Record<string, string> = {
-      MUSICA: '🎵 Música', DEPORTES: '⚽ Deportes',
-      TEATRO: '🎭 Teatro', CONFERENCIA: '🎤 Conferencia',
-      GASTRONOMIA: '🍽️ Gastronomía', ARTE: '🎨 Arte',
-      TECNOLOGIA: '💻 Tecnología', OTRO: '📌 Otro'
+      MUSICA: 'Música', DEPORTES: 'Deportes',
+      TEATRO: 'Teatro', CONFERENCIA: 'Conferencia',
+      GASTRONOMIA: 'Gastronomía', ARTE: 'Arte',
+      TECNOLOGIA: 'Tecnología', OTRO: 'Otro'
     };
     return labels[cat] ?? cat;
   }

@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   email = ''; password = ''; loading = false; error = '';
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
   onSubmit() {
     if (!this.email || !this.password) return;
     this.loading = true; this.error = '';
@@ -26,5 +26,9 @@ export class LoginComponent {
       },
       error: () => { this.error = 'Credenciales incorrectas.'; this.loading = false; }
     });
+  }
+  loginDemo() {
+    this.authService.loginDemo();
+    this.router.navigate(['/mis-eventos']);
   }
 }
