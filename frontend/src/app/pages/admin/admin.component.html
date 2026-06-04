@@ -1,1 +1,395 @@
-<p>Admin</p>
+<div class="page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-inner">
+            <div>
+                <h1>Panel de Administración</h1>
+                <p>Gestiona usuarios, eventos e ingresos de la plataforma</p>
+            </div>
+            <div class="header-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Admin
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-bar">
+        <div class="tabs-inner">
+            <button class="tab-btn" [class.activo]="tabActivo === 'dashboard'" (click)="cambiarTab('dashboard')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                    <rect x="14" y="14" width="7" height="7" />
+                </svg>
+                Dashboard
+            </button>
+            <button class="tab-btn" [class.activo]="tabActivo === 'usuarios'" (click)="cambiarTab('usuarios')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Usuarios
+            </button>
+            <button class="tab-btn" [class.activo]="tabActivo === 'eventos'" (click)="cambiarTab('eventos')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                Eventos
+            </button>
+            <button class="tab-btn" [class.activo]="tabActivo === 'ingresos'" (click)="cambiarTab('ingresos')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23" />
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                Ingresos
+            </button>
+        </div>
+    </div>
+
+    <div class="contenido">
+
+        <!-- ── TAB DASHBOARD ── -->
+        <div *ngIf="tabActivo === 'dashboard'">
+
+            <div class="loading-wrap" *ngIf="loadingDash">
+                <div class="skeleton alto" *ngFor="let i of [1,2,3,4]"></div>
+            </div>
+
+            <ng-container *ngIf="!loadingDash && dashboard">
+
+                <!-- Stats globales -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#eff6ff">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-num">{{ dashboard.usuariosTotales ?? '—' }}</span>
+                            <span class="stat-label">Usuarios totales</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#f0fdf4">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16a34a"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-num">{{ dashboard.eventos?.totalElements ?? dashboard.eventos?.length ??
+                                '—' }}</span>
+                            <span class="stat-label">Eventos publicados</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#fef3c7">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d97706"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="1" x2="12" y2="23" />
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-num">
+                                {{ dashboard.ingresosMes?.total ? formatearPrecio(dashboard.ingresosMes.total) : '—' }}
+                            </span>
+                            <span class="stat-label">Ingresos del mes</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card" style="cursor:pointer" (click)="cambiarTab('usuarios')">
+                        <div class="stat-icon" style="background:#fdf4ff">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9333ea"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-num stat-link">Gestionar →</span>
+                            <span class="stat-label">Panel de usuarios</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accesos rápidos -->
+                <div class="accesos">
+                    <h2>Accesos rápidos</h2>
+                    <div class="accesos-grid">
+                        <button class="acceso-card" (click)="cambiarTab('usuarios')">
+                            <div class="acceso-icon" style="background:#eff6ff; color:#2563eb">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                </svg>
+                            </div>
+                            <span>Gestionar usuarios</span>
+                        </button>
+                        <button class="acceso-card" (click)="cambiarTab('eventos')">
+                            <div class="acceso-icon" style="background:#f0fdf4; color:#16a34a">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                </svg>
+                            </div>
+                            <span>Ver eventos</span>
+                        </button>
+                        <button class="acceso-card" (click)="cambiarTab('ingresos')">
+                            <div class="acceso-icon" style="background:#fef3c7; color:#d97706">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="1" x2="12" y2="23" />
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                </svg>
+                            </div>
+                            <span>Ver ingresos</span>
+                        </button>
+                        <a routerLink="/eventos" class="acceso-card">
+                            <div class="acceso-icon" style="background:#fdf4ff; color:#9333ea">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                            </div>
+                            <span>Ver plataforma</span>
+                        </a>
+                    </div>
+                </div>
+
+            </ng-container>
+
+            <div class="estado-center" *ngIf="!loadingDash && !dashboard">
+                <p class="error-msg">No se pudo cargar el dashboard</p>
+                <button class="btn-reintentar" (click)="cargarDashboard()">Reintentar</button>
+            </div>
+        </div>
+
+        <!-- ── TAB USUARIOS ── -->
+        <div *ngIf="tabActivo === 'usuarios'">
+
+            <div class="seccion-header-row">
+                <h2>Gestión de Usuarios</h2>
+                <div class="filtro-search">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#717182" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <input type="text" placeholder="Buscar usuario..." [(ngModel)]="busquedaUsuario"
+                        (input)="filtrarUsuarios()" />
+                </div>
+            </div>
+
+            <div class="loading-wrap" *ngIf="loadingUsuarios">
+                <div class="skeleton" *ngFor="let i of [1,2,3,4,5]"></div>
+            </div>
+
+            <div class="estado-center" *ngIf="!loadingUsuarios && usuariosFiltrados.length === 0">
+                <div class="empty-icon"></div>
+                <p class="empty-msg">No se encontraron usuarios</p>
+            </div>
+
+            <div class="tabla-wrap" *ngIf="!loadingUsuarios && usuariosFiltrados.length > 0">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Registro</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let usuario of usuariosFiltrados">
+                            <td>
+                                <div class="usuario-cell">
+                                    <div class="avatar">{{ (usuario.nombre ?? usuario.email ??
+                                        'U').charAt(0).toUpperCase() }}</div>
+                                    <span>{{ usuario.nombre }} {{ usuario.apellido }}</span>
+                                </div>
+                            </td>
+                            <td class="text-muted">{{ usuario.email }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="rolBadgeClass(usuario.rol)">
+                                    {{ usuario.rol }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="usuario.activo ? 'badge-success' : 'badge-danger'">
+                                    {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+                                </span>
+                            </td>
+                            <td class="text-muted">{{ formatearFecha(usuario.fechaRegistro) }}</td>
+                            <td>
+                                <button class="btn-toggle" [ngClass]="usuario.activo ? 'btn-desactivar' : 'btn-activar'"
+                                    (click)="toggleUsuario(usuario)" [disabled]="toggling === usuario.id">
+                                    {{ toggling === usuario.id ? '...' : (usuario.activo ? 'Desactivar' : 'Activar') }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── TAB EVENTOS ── -->
+        <div *ngIf="tabActivo === 'eventos'">
+
+            <div class="seccion-header-row">
+                <h2>Gestión de Eventos</h2>
+                <div class="filtros">
+                    <button class="filtro-btn" [class.activo]="filtroEstadoEvento === 'PUBLICADO'"
+                        (click)="cambiarFiltroEvento('PUBLICADO')">Publicados</button>
+                    <button class="filtro-btn" [class.activo]="filtroEstadoEvento === 'BORRADOR'"
+                        (click)="cambiarFiltroEvento('BORRADOR')">Borradores</button>
+                    <button class="filtro-btn" [class.activo]="filtroEstadoEvento === 'CANCELADO'"
+                        (click)="cambiarFiltroEvento('CANCELADO')">Cancelados</button>
+                </div>
+            </div>
+
+            <div class="loading-wrap" *ngIf="loadingEventos">
+                <div class="skeleton" *ngFor="let i of [1,2,3]"></div>
+            </div>
+
+            <div class="estado-center" *ngIf="!loadingEventos && eventos.length === 0">
+                <div class="empty-icon"></div>
+                <p class="empty-msg">No hay eventos en este estado</p>
+            </div>
+
+            <div class="tabla-wrap" *ngIf="!loadingEventos && eventos.length > 0">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Lugar</th>
+                            <th>Fecha</th>
+                            <th>Aforo</th>
+                            <th>Precio</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let evento of eventos">
+                            <td>
+                                <div class="evento-cell">
+                                    <p class="evento-titulo-tabla">{{ evento.titulo }}</p>
+                                    <p class="text-muted small">{{ evento.categoria }}</p>
+                                </div>
+                            </td>
+                            <td class="text-muted">{{ evento.lugar }}</td>
+                            <td class="text-muted">{{ formatearFecha(evento.fechaEvento) }}</td>
+                            <td>
+                                <span class="aforo-text">
+                                    {{ evento.aforoDisponible }}/{{ evento.aforo }}
+                                </span>
+                            </td>
+                            <td class="precio-text">{{ formatearPrecio(evento.precio) }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="estadoEventoClass(evento.estado)">
+                                    {{ evento.estado }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── TAB INGRESOS ── -->
+        <div *ngIf="tabActivo === 'ingresos'">
+
+            <div class="seccion-header-row">
+                <h2>Ingresos de la Plataforma</h2>
+                <div class="filtros">
+                    <button class="filtro-btn" [class.activo]="periodoIngresos === 'semana'"
+                        (click)="cambiarPeriodo('semana')">Semana</button>
+                    <button class="filtro-btn" [class.activo]="periodoIngresos === 'mes'"
+                        (click)="cambiarPeriodo('mes')">Mes</button>
+                    <button class="filtro-btn" [class.activo]="periodoIngresos === 'anio'"
+                        (click)="cambiarPeriodo('anio')">Año</button>
+                </div>
+            </div>
+
+            <div class="loading-wrap" *ngIf="loadingIngresos">
+                <div class="skeleton alto" *ngFor="let i of [1,2]"></div>
+            </div>
+
+            <ng-container *ngIf="!loadingIngresos && ingresos">
+                <div class="ingresos-grid">
+                    <div class="ingreso-card principal">
+                        <p class="ingreso-label">Total ingresos</p>
+                        <p class="ingreso-num">{{ formatearPrecio(ingresosObj.total ?? ingresosObj.totalIngresos ?? 0)
+                            }}</p>
+                        <p class="ingreso-periodo">Periodo: {{ periodoIngresos }}</p>
+                    </div>
+                    <div class="ingreso-card" *ngIf="ingresosObj.comisiones">
+                        <p class="ingreso-label">Comisiones plataforma</p>
+                        <p class="ingreso-num secundario">{{ formatearPrecio(ingresosObj.comisiones) }}</p>
+                    </div>
+                    <div class="ingreso-card" *ngIf="ingresosObj.totalTransacciones">
+                        <p class="ingreso-label">Total transacciones</p>
+                        <p class="ingreso-num secundario">{{ ingresosObj.totalTransacciones }}</p>
+                    </div>
+                </div>
+
+                <!-- Detalle si viene como lista -->
+                <div class="tabla-wrap" *ngIf="ingresosObj.detalle?.length > 0">
+                    <table class="tabla">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Concepto</th>
+                                <th>Monto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of ingresosObj.detalle">
+                                <td class="text-muted">{{ formatearFecha(item.fecha) }}</td>
+                                <td>{{ item.concepto ?? '—' }}</td>
+                                <td class="precio-text">{{ formatearPrecio(item.monto) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+
+            <div class="estado-center" *ngIf="!loadingIngresos && !ingresos">
+                <p class="error-msg">No se pudieron cargar los ingresos</p>
+                <button class="btn-reintentar" (click)="cargarIngresos()">Reintentar</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -29,7 +29,7 @@ export class AuthService {
       email: 'demo@evently.com',
       nombre: 'Usuario',
       apellido: 'Demo',
-      rol: 'ORGANIZADOR' as any
+      rol: 'ADMIN' as any
     };
     localStorage.setItem(this.TOKEN_KEY, fakeUser.token);
     localStorage.setItem(this.USER_KEY, JSON.stringify(fakeUser));
