@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/eventos")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class EventoController {
 
     @Autowired
@@ -57,7 +57,8 @@ public class EventoController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ORGANIZADOR')")
-    public ResponseEntity<Evento> editarEvento(@PathVariable Long id, @RequestBody Evento evento, Authentication authentication) {
+    public ResponseEntity<Evento> editarEvento(@PathVariable Long id, @RequestBody Evento evento,
+            Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.editarEvento(id, evento, usuario));
     }
@@ -79,7 +80,8 @@ public class EventoController {
 
     @GetMapping("/{id}/estadistica")
     @PreAuthorize("hasRole('ORGANIZADOR')")
-    public ResponseEntity<Map<String, Object>> estadisticaOcupacion(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> estadisticaOcupacion(@PathVariable Long id,
+            Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.estadisticaOcupacion(id, usuario));
     }
@@ -107,12 +109,16 @@ public class EventoController {
     @PutMapping("/{id}/aforo")
     public ResponseEntity<Evento> actualizarAforoInterno(@PathVariable Long id, @RequestParam Integer cantidad) {
         Evento evento = eventoService.obtenerPorId(id);
-        evento.setAforoDisponible(evento.getAforoDisponible() + cantidad); // cantidad can be negative (e.g. reserving) or positive (cancelling)
+        evento.setAforoDisponible(evento.getAforoDisponible() + cantidad); // cantidad can be negative (e.g. reserving)
+                                                                           // or positive (cancelling)
         // Check if there is enough capacity when reserving
         if (evento.getAforoDisponible() < 0) {
             throw new RuntimeException("No hay aforo disponible para este evento");
         }
-        return ResponseEntity.ok(eventoService.crearEvento(evento, null)); // Wait, crearEvento save to DB, let's call save direct or use an updated internal logic.
-        // Actually, we can just save it to repository directly to bypass plan limits when updating capacity!
+        return ResponseEntity.ok(eventoService.crearEvento(evento, null)); // Wait, crearEvento save to DB, let's call
+                                                                           // save direct or use an updated internal
+                                                                           // logic.
+        // Actually, we can just save it to repository directly to bypass plan limits
+        // when updating capacity!
     }
 }

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -50,7 +50,8 @@ public class AuthController {
     }
 
     @PutMapping("/perfil")
-    public ResponseEntity<Usuario> editarPerfil(@RequestBody Usuario usuarioActualizado, Authentication authentication) {
+    public ResponseEntity<Usuario> editarPerfil(@RequestBody Usuario usuarioActualizado,
+            Authentication authentication) {
         Usuario usuario = usuarioRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 

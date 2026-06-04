@@ -13,9 +13,9 @@ import { Rol } from '../../models/auth.model';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  nombre = ''; apellido = ''; email = ''; password = ''; confirmPassword = ''; rol: Rol = 'USUARIO';
+  nombre = ''; apellido = ''; email = ''; password = ''; confirmPassword = ''; rol: Rol = 'CLIENTE';
   loading = false; error = '';
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
   onSubmit() {
     this.error = '';
     if (this.password !== this.confirmPassword) { this.error = 'Las contraseñas no coinciden.'; return; }
