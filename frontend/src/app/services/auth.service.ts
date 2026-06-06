@@ -10,11 +10,11 @@ import { LoginRequest, RegisterRequest, AuthResponse } from '../models/auth.mode
 })
 export class AuthService {
 
-  private readonly apiUrl    = `${environment.apiUrl}/auth`;
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
   private readonly TOKEN_KEY = 'evently_token';
-  private readonly USER_KEY  = 'evently_user';
+  private readonly USER_KEY = 'evently_user';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
@@ -65,5 +65,22 @@ export class AuthService {
     } catch {
       return true;
     }
+  }
+
+  getPerfil(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/perfil`);
+  }
+
+  updatePerfil(userData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/perfil`, userData).pipe(
+      tap(response => {
+        const user = this.getUser();
+        if (user) {
+          user.nombre = response.nombre;
+          user.apellido = response.apellido;
+          localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        }
+      })
+    );
   }
 }

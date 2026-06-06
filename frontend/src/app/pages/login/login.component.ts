@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   email = ''; password = ''; loading = false; error = '';
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
   onSubmit() {
     if (!this.email || !this.password) return;
     this.loading = true; this.error = '';
@@ -24,7 +24,10 @@ export class LoginComponent {
         else if (rol === 'ORGANIZADOR') this.router.navigate(['/mis-eventos']);
         else this.router.navigate(['/dashboard']);
       },
-      error: () => { this.error = 'Credenciales incorrectas.'; this.loading = false; }
+      error: (err) => {
+        this.error = err.error?.mensaje || err.error?.message || 'Credenciales incorrectas.';
+        this.loading = false;
+      }
     });
   }
 }

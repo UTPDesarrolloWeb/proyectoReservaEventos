@@ -13,9 +13,9 @@ import { Rol } from '../../models/auth.model';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-  nombre = ''; apellido = ''; email = ''; password = ''; confirmPassword = ''; rol: Rol = 'USUARIO';
+  nombre = ''; apellido = ''; email = ''; password = ''; confirmPassword = ''; rol: Rol = 'CLIENTE';
   loading = false; error = '';
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) { }
   onSubmit() {
     this.error = '';
     if (this.password !== this.confirmPassword) { this.error = 'Las contraseñas no coinciden.'; return; }
@@ -23,7 +23,10 @@ export class RegisterComponent {
     this.loading = true;
     this.authService.register({ nombre: this.nombre, apellido: this.apellido, email: this.email, password: this.password, rol: this.rol }).subscribe({
       next: () => { this.router.navigate(this.rol === 'ORGANIZADOR' ? ['/mis-eventos'] : ['/dashboard']); },
-      error: () => { this.error = 'Error al crear la cuenta.'; this.loading = false; }
+      error: (err) => {
+        this.error = err.error?.mensaje || err.error?.message || 'Error al crear la cuenta.';
+        this.loading = false;
+      }
     });
   }
 }

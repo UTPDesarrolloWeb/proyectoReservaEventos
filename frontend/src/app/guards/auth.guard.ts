@@ -4,7 +4,7 @@ import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  const router      = inject(Router);
+  const router = inject(Router);
 
   if (authService.isLoggedIn()) return true;
 
@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = () => {
 
 export const adminGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  const router      = inject(Router);
+  const router = inject(Router);
 
   if (authService.isLoggedIn() && authService.getRol() === 'ADMIN') return true;
 
@@ -24,7 +24,7 @@ export const adminGuard: CanActivateFn = () => {
 
 export const organizadorGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  const router      = inject(Router);
+  const router = inject(Router);
 
   if (authService.isLoggedIn() && authService.getRol() === 'ORGANIZADOR') return true;
 
