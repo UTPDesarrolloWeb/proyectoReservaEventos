@@ -6,17 +6,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, NavbarComponent],
-  template: `
-    <app-navbar></app-navbar>
-    <main>
-      <router-outlet></router-outlet>
-    </main>
-  `,
-  styles: [`
-    main {
-      min-height: calc(100vh - 64px);
-    }
-  `]
+  templateUrl: './app.html',
+  styleUrl: './app.css'
 })
 export class App {
   title = 'evently';

@@ -22,19 +22,6 @@ export class AuthService {
     );
   }
 
-  // ── LOGIN SIMULADO (solo para desarrollo sin backend) ──
-  loginDemo() {
-    const fakeUser = {
-      token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZW1vQGV2ZW50bHkuY29tIiwiaWF0IjoxNzAwMDAwMDAwLCJleHAiOjk5OTk5OTk5OTl9.demo',
-      email: 'demo@evently.com',
-      nombre: 'Usuario',
-      apellido: 'Demo',
-      rol: 'ADMIN' as any
-    };
-    localStorage.setItem(this.TOKEN_KEY, fakeUser.token);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(fakeUser));
-  }
-
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
       tap(response => this.saveSession(response))
@@ -78,5 +65,22 @@ export class AuthService {
     } catch {
       return true;
     }
+  }
+
+  getPerfil(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/perfil`);
+  }
+
+  updatePerfil(userData: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/perfil`, userData).pipe(
+      tap(response => {
+        const user = this.getUser();
+        if (user) {
+          user.nombre = response.nombre;
+          user.apellido = response.apellido;
+          localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+        }
+      })
+    );
   }
 }

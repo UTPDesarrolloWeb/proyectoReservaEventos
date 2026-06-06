@@ -23,7 +23,10 @@ export class RegisterComponent {
     this.loading = true;
     this.authService.register({ nombre: this.nombre, apellido: this.apellido, email: this.email, password: this.password, rol: this.rol }).subscribe({
       next: () => { this.router.navigate(this.rol === 'ORGANIZADOR' ? ['/mis-eventos'] : ['/dashboard']); },
-      error: () => { this.error = 'Error al crear la cuenta.'; this.loading = false; }
+      error: (err) => {
+        this.error = err.error?.mensaje || err.error?.message || 'Error al crear la cuenta.';
+        this.loading = false;
+      }
     });
   }
 }

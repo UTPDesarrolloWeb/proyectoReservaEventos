@@ -24,11 +24,10 @@ export class LoginComponent {
         else if (rol === 'ORGANIZADOR') this.router.navigate(['/mis-eventos']);
         else this.router.navigate(['/dashboard']);
       },
-      error: () => { this.error = 'Credenciales incorrectas.'; this.loading = false; }
+      error: (err) => {
+        this.error = err.error?.mensaje || err.error?.message || 'Credenciales incorrectas.';
+        this.loading = false;
+      }
     });
-  }
-  loginDemo() {
-    this.authService.loginDemo();
-    this.router.navigate(['/mis-eventos']);
   }
 }

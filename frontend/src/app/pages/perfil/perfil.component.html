@@ -1,1 +1,52 @@
-<p>Perfil</p>
+<div class="profile-wrapper">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="avatar-circle">
+        <span class="material-symbols-outlined">person</span>
+      </div>
+      <h1 class="title">Mi Perfil</h1>
+      <p class="role-badge" [class.admin]="rol === 'ADMIN'" [class.org]="rol === 'ORGANIZADOR'">
+        {{ getRoleLabel(rol) }}
+      </p>
+    </div>
+
+    <div class="profile-body">
+      <div class="alert-error" *ngIf="error">{{ error }}</div>
+      <div class="alert-success" *ngIf="success">{{ success }}</div>
+
+      <div class="loading-container" *ngIf="loading">
+        <div class="spinner"></div>
+        <p>Cargando información del perfil...</p>
+      </div>
+
+      <form (ngSubmit)="onSave()" #profileForm="ngForm" *ngIf="!loading">
+        <div class="static-field">
+          <label>Email (no editable)</label>
+          <div class="email-value">
+            <span class="material-symbols-outlined">mail</span>
+            <span>{{ email }}</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" [(ngModel)]="nombre" name="nombre" required placeholder="Ingresa tu nombre" />
+          </div>
+
+          <div class="field">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" type="text" [(ngModel)]="apellido" name="apellido" required placeholder="Ingresa tu apellido" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn-save" [disabled]="saving || profileForm.invalid">
+          <span *ngIf="!saving">Guardar Cambios</span>
+          <span *ngIf="saving" class="spinner-row">
+            <span class="spinner"></span> Guardando...
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

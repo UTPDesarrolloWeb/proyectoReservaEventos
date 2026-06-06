@@ -15,8 +15,9 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   token: string;
-  email?: string;
+  email: string;
   nombre?: string;
+  apellido?: string;
   rol?: Rol;
   [key: string]: any;
 }
