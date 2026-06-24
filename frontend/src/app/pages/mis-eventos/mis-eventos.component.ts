@@ -33,8 +33,8 @@ export class MisEventosComponent implements OnInit {
   form: EventoRequest = this.formVacio();
 
   categorias: CategoriaEvento[] = [
-    'MUSICA', 'DEPORTES', 'TEATRO', 'CONFERENCIA',
-    'GASTRONOMIA', 'ARTE', 'TECNOLOGIA', 'OTRO'
+    'CONCIERTO', 'TALLER', 'CONFERENCIA', 'CURSO',
+    'FESTIVAL', 'DEPORTE', 'TEATRO', 'OTRO'
   ];
 
   // Acciones
@@ -182,10 +182,10 @@ export class MisEventosComponent implements OnInit {
 
   categoriaLabel(cat: string): string {
     const labels: Record<string, string> = {
-      MUSICA: 'Música', DEPORTES: 'Deportes',
-      TEATRO: 'Teatro', CONFERENCIA: 'Conferencia',
-      GASTRONOMIA: 'Gastronomía', ARTE: 'Arte',
-      TECNOLOGIA: 'Tecnología', OTRO: 'Otro'
+      CONCIERTO: 'Concierto', TALLER: 'Taller',
+      CONFERENCIA: 'Conferencia', CURSO: 'Curso',
+      FESTIVAL: 'Festival', DEPORTE: 'Deporte',
+      TEATRO: 'Teatro', OTRO: 'Otro'
     };
     return labels[cat] ?? cat;
   }

@@ -47,7 +47,7 @@ export class EventoDetalleComponent implements OnInit {
     }
 
     get isLoggedIn(): boolean { return this.authService.isLoggedIn(); }
-    get isCliente(): boolean { return this.authService.getRol() === 'USUARIO'; }
+    get isCliente(): boolean { return this.authService.getRol() === 'CLIENTE'; }
 
     reservar() {
         if (!this.evento) return;

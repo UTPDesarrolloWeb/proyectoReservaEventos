@@ -51,7 +51,7 @@ public class OrganizadorService {
 
     public Organizador obtenerPorUsuarioId(Long usuarioId) {
         return organizadorRepository.findByUsuarioId(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Organizador no encontrado para el usuario: " + usuarioId));
+                .orElseGet(() -> registrarOrganizador(usuarioId, TipoPlan.BASICO));
     }
 
     public Organizador cambiarPlan(Long organizadorId, TipoPlan nuevoTipo) {

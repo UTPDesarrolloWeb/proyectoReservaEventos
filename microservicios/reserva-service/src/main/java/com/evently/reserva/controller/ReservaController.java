@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservas")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class ReservaController {
     @Autowired
     private ReservaService reservaService;
@@ -25,7 +25,7 @@ public class ReservaController {
 
     // Crea la reserva - uso del Cliente
     @PostMapping("/evento/{eventoId}")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<Reserva> crearReserva(
             @PathVariable Long eventoId,
             @RequestParam int cantidadEntradas,
@@ -37,7 +37,7 @@ public class ReservaController {
 
     // Cancela la reserva - uso del cliente
     @PutMapping("/{reservaId}/cancelar")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<Reserva> cancelarReserva(
             @PathVariable Long reservaId,
             Authentication authentication) {
@@ -48,7 +48,7 @@ public class ReservaController {
 
     // Mis reservas trae todo - uso del cliente
     @GetMapping("/mis-reservas")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<List<Reserva>> misReservas(Authentication authentication) {
         UsuarioDTO cliente = authClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(reservaService.misReservas(cliente));
@@ -56,7 +56,7 @@ public class ReservaController {
 
     // Mis reservas con paginación - uso del cliente
     @GetMapping("/mis-reservas/paginado")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<Page<Reserva>> misReservasPaginadas(
             @RequestParam(defaultValue = "0") int pagina,
             @RequestParam(defaultValue = "5") int cantidad,
@@ -68,7 +68,7 @@ public class ReservaController {
 
     // Reservas realizadas de un evento - uso del Organizador
     @GetMapping("/evento/{eventoId}")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<List<Reserva>> reservasPorEvento(
             @PathVariable Long eventoId,
             Authentication authentication) {
