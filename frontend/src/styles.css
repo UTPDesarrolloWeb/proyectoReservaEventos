@@ -1,1 +1,1058 @@
-/* You can add global styles to this file, and also import other style files */
+/*=========================================================
+    EVENTLY DESIGN SYSTEM
+    Version: 1.0
+=========================================================*/
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/*=========================================================
+    VARIABLES GLOBALES
+=========================================================*/
+
+:root {
+
+    /* Colores principales */
+
+    --primary: #7C3AED;
+    --primary-dark: #6D28D9;
+    --primary-light: #A78BFA;
+
+    --secondary: #2563EB;
+
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+
+    /* Fondos */
+
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+
+    /* Textos */
+
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+    --text-light: #94A3B8;
+
+    /* Bordes */
+
+    --border: #E2E8F0;
+
+    /* Sombras */
+
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, .05);
+
+    --shadow-md: 0 10px 25px rgba(15, 23, 42, .08);
+
+    --shadow-lg: 0 20px 45px rgba(15, 23, 42, .12);
+
+    /* Border Radius */
+
+    --radius-xs: 6px;
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    /* Espaciado */
+
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+    --space-xxl: 80px;
+
+    /* Navbar */
+
+    --navbar-height: 75px;
+
+    /* Transiciones */
+
+    --transition: all .30s ease;
+
+}
+
+/*=========================================================
+    RESET CSS
+=========================================================*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+
+    scroll-behavior: smooth;
+}
+
+body {
+
+    font-family: 'Poppins', sans-serif;
+
+    background: var(--background);
+
+    color: var(--text-primary);
+
+    line-height: 1.6;
+
+    overflow-x: hidden;
+
+}
+
+/*=========================================================
+    SCROLLBAR
+=========================================================*/
+
+::-webkit-scrollbar {
+
+    width: 10px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background: #edf2f7;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: var(--primary);
+
+    border-radius: 50px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: var(--primary-dark);
+
+}
+
+/*=========================================================
+    TIPOGRAFÍA
+=========================================================*/
+
+h1 {
+
+    font-size: 3.2rem;
+
+    font-weight: 700;
+
+    color: var(--text-primary);
+
+}
+
+h2 {
+
+    font-size: 2.5rem;
+
+    font-weight: 700;
+
+}
+
+h3 {
+
+    font-size: 2rem;
+
+    font-weight: 600;
+
+}
+
+h4 {
+
+    font-size: 1.4rem;
+
+    font-weight: 600;
+
+}
+
+h5 {
+
+    font-size: 1.15rem;
+
+    font-weight: 600;
+
+}
+
+p {
+
+    color: var(--text-secondary);
+
+    font-size: 1rem;
+
+}
+
+small {
+
+    color: var(--text-light);
+
+}
+
+a {
+
+    text-decoration: none;
+
+    color: inherit;
+
+    transition: var(--transition);
+
+}
+
+ul {
+
+    list-style: none;
+
+}
+
+img {
+
+    max-width: 100%;
+
+    display: block;
+
+}
+
+/*=========================================================
+    CONTENEDORES
+=========================================================*/
+
+.container {
+
+    width: 90%;
+
+    max-width: 1300px;
+
+    margin: auto;
+
+}
+
+.section {
+
+    padding: 80px 0;
+
+}
+
+/*=========================================================
+    GRID
+=========================================================*/
+
+.grid {
+
+    display: grid;
+
+    gap: 25px;
+
+}
+
+.grid-2 {
+
+    grid-template-columns: repeat(2, 1fr);
+
+}
+
+.grid-3 {
+
+    grid-template-columns: repeat(3, 1fr);
+
+}
+
+.grid-4 {
+
+    grid-template-columns: repeat(4, 1fr);
+
+}
+
+/*=========================================================
+    FLEX
+=========================================================*/
+
+.flex {
+
+    display: flex;
+
+}
+
+.flex-center {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+.flex-between {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.flex-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+/*=========================================================
+    UTILIDADES
+=========================================================*/
+
+.text-center {
+
+    text-align: center;
+
+}
+
+.text-left {
+
+    text-align: left;
+
+}
+
+.text-right {
+
+    text-align: right;
+
+}
+
+.mt-1 {
+
+    margin-top: 10px;
+
+}
+
+.mt-2 {
+
+    margin-top: 20px;
+
+}
+
+.mt-3 {
+
+    margin-top: 30px;
+
+}
+
+.mt-4 {
+
+    margin-top: 40px;
+
+}
+
+.mb-1 {
+
+    margin-bottom: 10px;
+
+}
+
+.mb-2 {
+
+    margin-bottom: 20px;
+
+}
+
+.mb-3 {
+
+    margin-bottom: 30px;
+
+}
+
+.mb-4 {
+
+    margin-bottom: 40px;
+
+}
+
+.py {
+
+    padding: 80px 0;
+
+}
+
+.rounded {
+
+    border-radius: var(--radius-md);
+
+}
+
+.shadow {
+
+    box-shadow: var(--shadow-md);
+
+}
+
+/*=========================================================
+    SELECCIÓN DE TEXTO
+=========================================================*/
+
+::selection {
+
+    background: var(--primary);
+
+    color: white;
+
+}
+
+/*=========================================================
+    RESPONSIVE
+=========================================================*/
+
+@media(max-width:992px) {
+
+    .grid-4 {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+    .grid-3 {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+}
+
+@media(max-width:768px) {
+
+    .container {
+
+        width: 94%;
+
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .section {
+
+        padding: 60px 0;
+
+    }
+
+    h1 {
+
+        font-size: 2.4rem;
+
+    }
+
+    h2 {
+
+        font-size: 2rem;
+
+    }
+
+}
+
+@media(max-width:480px) {
+
+    h1 {
+
+        font-size: 2rem;
+
+    }
+
+    h2 {
+
+        font-size: 1.6rem;
+
+    }
+
+    body {
+
+        font-size: .95rem;
+
+    }
+
+}
+
+/*=========================================================
+                BOTONES
+=========================================================*/
+
+.btn {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    padding: 14px 28px;
+
+    border: none;
+
+    border-radius: var(--radius-sm);
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition: var(--transition);
+
+    text-decoration: none;
+
+    user-select: none;
+
+}
+
+.btn:hover {
+
+    transform: translateY(-3px);
+
+}
+
+.btn-primary {
+
+    background: linear-gradient(135deg, #7C3AED, #5B21B6);
+
+    color: white;
+
+    box-shadow: var(--shadow-md);
+
+}
+
+.btn-primary:hover {
+
+    box-shadow: var(--shadow-lg);
+
+}
+
+.btn-secondary {
+
+    background: #2563EB;
+
+    color: white;
+
+}
+
+.btn-outline {
+
+    background: white;
+
+    color: var(--primary);
+
+    border: 2px solid var(--primary);
+
+}
+
+.btn-outline:hover {
+
+    background: var(--primary);
+
+    color: white;
+
+}
+
+.btn-success {
+
+    background: var(--success);
+
+    color: white;
+
+}
+
+.btn-danger {
+
+    background: var(--danger);
+
+    color: white;
+
+}
+
+.btn-block {
+
+    width: 100%;
+
+}
+
+
+/*=========================================================
+                    CARDS
+=========================================================*/
+
+.card {
+
+    background: var(--surface);
+
+    border-radius: var(--radius-md);
+
+    padding: 24px;
+
+    box-shadow: var(--shadow-sm);
+
+    border: 1px solid var(--border);
+
+    transition: var(--transition);
+
+}
+
+.card:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow: var(--shadow-lg);
+
+}
+
+.card-header {
+
+    margin-bottom: 18px;
+
+}
+
+.card-title {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+}
+
+.card-body {
+
+    color: var(--text-secondary);
+
+}
+
+.card-footer {
+
+    margin-top: 25px;
+
+}
+
+
+/*=========================================================
+                INPUTS
+=========================================================*/
+
+.input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+
+}
+
+label {
+
+    font-weight: 600;
+
+    color: var(--text-primary);
+
+}
+
+input,
+textarea,
+select {
+
+    width: 100%;
+
+    padding: 14px 18px;
+
+    border-radius: var(--radius-sm);
+
+    border: 1px solid var(--border);
+
+    outline: none;
+
+    background: white;
+
+    font-size: 15px;
+
+    transition: var(--transition);
+
+}
+
+textarea {
+
+    resize: vertical;
+
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+
+    border-color: var(--primary);
+
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, .15);
+
+}
+
+
+/*=========================================================
+                    BADGES
+=========================================================*/
+
+.badge {
+
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+.badge-success {
+
+    background: #DCFCE7;
+
+    color: #166534;
+
+}
+
+.badge-warning {
+
+    background: #FEF3C7;
+
+    color: #92400E;
+
+}
+
+.badge-danger {
+
+    background: #FEE2E2;
+
+    color: #991B1B;
+
+}
+
+.badge-primary {
+
+    background: #EDE9FE;
+
+    color: #6D28D9;
+
+}
+
+
+/*=========================================================
+                ALERTAS
+=========================================================*/
+
+.alert {
+
+    padding: 18px;
+
+    border-radius: var(--radius-sm);
+
+    margin: 15px 0;
+
+    font-weight: 500;
+
+}
+
+.alert-success {
+
+    background: #ECFDF5;
+
+    color: #047857;
+
+}
+
+.alert-danger {
+
+    background: #FEF2F2;
+
+    color: #B91C1C;
+
+}
+
+.alert-warning {
+
+    background: #FFFBEB;
+
+    color: #92400E;
+
+}
+
+.alert-primary {
+
+    background: #F5F3FF;
+
+    color: #6D28D9;
+
+}
+
+
+/*=========================================================
+                    TABLAS
+=========================================================*/
+
+.table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    border-radius: var(--radius-md);
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow-sm);
+
+}
+
+.table thead {
+
+    background: #F8FAFC;
+
+}
+
+.table th {
+
+    padding: 18px;
+
+    text-align: left;
+
+    font-weight: 600;
+
+}
+
+.table td {
+
+    padding: 18px;
+
+    border-top: 1px solid var(--border);
+
+}
+
+.table tbody tr:hover {
+
+    background: #F8FAFC;
+
+}
+
+
+/*=========================================================
+                AVATARES
+=========================================================*/
+
+.avatar {
+
+    width: 45px;
+
+    height: 45px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+}
+
+.avatar-lg {
+
+    width: 70px;
+
+    height: 70px;
+
+}
+
+
+/*=========================================================
+                    LOADER
+=========================================================*/
+
+.loader {
+
+    width: 45px;
+
+    height: 45px;
+
+    border: 4px solid #E2E8F0;
+
+    border-top: 4px solid var(--primary);
+
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
+
+}
+
+@keyframes spin {
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}
+
+
+/*=========================================================
+                    ANIMACIONES
+=========================================================*/
+
+.fade-in {
+
+    animation: fadeIn .7s ease;
+
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+.zoom {
+
+    transition: .3s;
+
+}
+
+.zoom:hover {
+
+    transform: scale(1.05);
+
+}
+
+
+/*=========================================================
+                EFECTO GLASS
+=========================================================*/
+
+.glass {
+
+    background: rgba(255, 255, 255, .70);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, .3);
+
+}
+
+
+/*=========================================================
+                HERO SECTION
+=========================================================*/
+
+.hero {
+
+    padding: 110px 0;
+
+}
+
+.hero-title {
+
+    font-size: 58px;
+
+    font-weight: 700;
+
+    line-height: 1.1;
+
+}
+
+.hero-subtitle {
+
+    margin-top: 20px;
+
+    font-size: 19px;
+
+    color: var(--text-secondary);
+
+    max-width: 650px;
+
+}
+
+
+/*=========================================================
+                SECCIONES
+=========================================================*/
+
+.section-title {
+
+    font-size: 42px;
+
+    font-weight: 700;
+
+    margin-bottom: 18px;
+
+}
+
+.section-description {
+
+    color: var(--text-secondary);
+
+    max-width: 700px;
+
+    margin: auto;
+
+}
+
+
+/*=========================================================
+                EFECTOS
+=========================================================*/
+
+.hover-lift {
+
+    transition: .3s;
+
+}
+
+.hover-lift:hover {
+
+    transform: translateY(-10px);
+
+}
+
+.shadow-hover:hover {
+
+    box-shadow: var(--shadow-lg);
+
+}

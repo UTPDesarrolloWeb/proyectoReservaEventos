@@ -75,4 +75,19 @@ public class AuthController {
         return ResponseEntity.ok(
                 usuarioRepository.save(usuario));
     }
+
+    @GetMapping("/usuario")
+    public ResponseEntity<Map<String, Object>> obtenerUsuarioPorEmail(@RequestParam String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", usuario.getId());
+        response.put("nombre", usuario.getNombre());
+        response.put("apellido", usuario.getApellido());
+        response.put("email", usuario.getEmail());
+        response.put("rol", usuario.getRol().name());
+
+        return ResponseEntity.ok(response);
+    }
 }

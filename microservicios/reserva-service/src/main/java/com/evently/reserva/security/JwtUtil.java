@@ -20,7 +20,8 @@ public class JwtUtil {
     }
 
     public String extractRole(String token) {
-        return extractClaims(token).get("role", String.class);
+        Object roleClaim = extractClaims(token).get("role");
+        return roleClaim != null ? String.valueOf(roleClaim) : null;
     }
 
     public boolean validateToken(String token) {

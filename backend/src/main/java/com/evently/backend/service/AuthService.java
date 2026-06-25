@@ -48,7 +48,7 @@ public class AuthService {
         usuarioRepository.save(usuario);
 
         // Generar token
-        String token = jwtUtil.generateToken(usuario.getEmail());
+        String token = jwtUtil.generateToken(usuario.getEmail(), usuario.getRol().name());
 
         // Preparar respuesta
         Map<String, Object> response = new HashMap<>();
@@ -67,9 +67,7 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
-                        request.getPassword()
-                )
-        );
+                        request.getPassword()));
 
         // Si termina aqui quiere decir que las credenciales son correctas
         Usuario usuario = usuarioRepository
@@ -77,7 +75,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         // Generar token
-        String token = jwtUtil.generateToken(usuario.getEmail());
+        String token = jwtUtil.generateToken(usuario.getEmail(), usuario.getRol().name());
 
         // Preparar respuesta
         Map<String, Object> response = new HashMap<>();

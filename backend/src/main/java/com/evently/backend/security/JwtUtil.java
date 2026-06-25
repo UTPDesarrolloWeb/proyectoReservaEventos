@@ -21,9 +21,10 @@ public class JwtUtil {
     }
 
     // Genera el token con el email del usuario
-    public String generateToken(String email) {
+    public String generateToken(String email, String rol) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("role", rol) // Inyeccion del rol para los microservicios
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
