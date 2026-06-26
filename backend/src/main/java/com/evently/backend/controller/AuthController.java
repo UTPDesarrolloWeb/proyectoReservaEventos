@@ -86,7 +86,12 @@ public class AuthController {
         response.put("nombre", usuario.getNombre());
         response.put("apellido", usuario.getApellido());
         response.put("email", usuario.getEmail());
-        response.put("rol", usuario.getRol().name());
+
+        String rolTexto = "CLIENTE";
+        if (usuario.getRol() != null) {
+            rolTexto = usuario.getRol().toString();
+        }
+        response.put("rol", rolTexto);
 
         return ResponseEntity.ok(response);
     }

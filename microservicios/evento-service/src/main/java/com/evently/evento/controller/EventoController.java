@@ -108,17 +108,11 @@ public class EventoController {
 
     @PutMapping("/{id}/aforo")
     public ResponseEntity<Evento> actualizarAforoInterno(@PathVariable Long id, @RequestParam Integer cantidad) {
-        Evento evento = eventoService.obtenerPorId(id);
-        evento.setAforoDisponible(evento.getAforoDisponible() + cantidad); // cantidad can be negative (e.g. reserving)
-                                                                           // or positive (cancelling)
-        // Check if there is enough capacity when reserving
-        if (evento.getAforoDisponible() < 0) {
-            throw new RuntimeException("No hay aforo disponible para este evento");
-        }
-        return ResponseEntity.ok(eventoService.crearEvento(evento, null)); // Wait, crearEvento save to DB, let's call
-                                                                           // save direct or use an updated internal
-                                                                           // logic.
-        // Actually, we can just save it to repository directly to bypass plan limits
-        // when updating capacity!
+        // Evento evento = eventoService.obtenerPorId(id);
+        // evento.setAforoDisponible(evento.getAforoDisponible() + cantidad);
+        // if (evento.getAforoDisponible() < 0) {
+        // throw new RuntimeException("No hay aforo disponible para este evento");
+        // }
+        return ResponseEntity.ok(eventoService.actualizarAforo(id, cantidad));
     }
 }

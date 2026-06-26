@@ -1056,3 +1056,83 @@ select:focus {
     box-shadow: var(--shadow-lg);
 
 }
+
+/*=========================================================
+            REGLAS GLOBALES
+=========================================================*/
+
+html,
+body {
+
+    width: 100%;
+
+    min-height: 100%;
+
+}
+
+body {
+
+    text-rendering: optimizeLegibility;
+
+    -webkit-font-smoothing: antialiased;
+
+    -moz-osx-font-smoothing: grayscale;
+
+}
+
+/* Evita que las imágenes se deformen */
+
+img {
+
+    max-width: 100%;
+
+    height: auto;
+
+}
+
+/* Accesibilidad */
+
+button {
+
+    font-family: inherit;
+
+}
+
+input,
+textarea,
+select {
+
+    font-family: inherit;
+
+}
+
+/* Links */
+
+a {
+
+    cursor: pointer;
+
+}
+
+/* Iconos */
+
+i {
+
+    vertical-align: middle;
+
+}
+
+/* Router */
+
+router-outlet {
+
+    display: none;
+
+}
+
+/* Angular Material */
+html {
+
+    color-scheme: light;
+
+}

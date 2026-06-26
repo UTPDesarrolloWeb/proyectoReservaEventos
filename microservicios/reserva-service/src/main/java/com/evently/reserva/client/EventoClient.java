@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "evento-service", url = "http://evento-service:8082")
 public interface EventoClient {
-    @GetMapping("/api/eventos/{id}")
+
+    @GetMapping("/api/eventos/{id}/interno")
     EventoDTO obtenerPorId(@PathVariable("id") Long id);
 
     @PutMapping("/api/eventos/{id}/aforo")
