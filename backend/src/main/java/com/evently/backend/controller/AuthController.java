@@ -16,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -75,5 +74,25 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 usuarioRepository.save(usuario));
+    }
+
+    @GetMapping("/usuario")
+    public ResponseEntity<Map<String, Object>> obtenerUsuarioPorEmail(@RequestParam String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", usuario.getId());
+        response.put("nombre", usuario.getNombre());
+        response.put("apellido", usuario.getApellido());
+        response.put("email", usuario.getEmail());
+
+        String rolTexto = "CLIENTE";
+        if (usuario.getRol() != null) {
+            rolTexto = usuario.getRol().toString();
+        }
+        response.put("rol", rolTexto);
+
+        return ResponseEntity.ok(response);
     }
 }

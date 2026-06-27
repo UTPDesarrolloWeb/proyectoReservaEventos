@@ -1,53 +1,217 @@
 <nav class="navbar">
+
   <div class="nav-container">
 
+    <!-- ========================= -->
+    <!-- LOGO -->
+    <!-- ========================= -->
+
     <a routerLink="/" class="logo">
+
       <div class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white"
-             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <line x1="16" y1="2" x2="16" y2="6"/>
-          <line x1="8"  y1="2" x2="8"  y2="6"/>
-          <line x1="3"  y1="10" x2="21" y2="10"/>
-        </svg>
+
+        <i class="bi bi-calendar-event-fill"></i>
+
       </div>
-      <span>Evently</span>
+
+      <div class="logo-text">
+
+        <span class="logo-title">
+          Evently
+        </span>
+
+        <small>
+          Discover Amazing Events
+        </small>
+
+      </div>
+
     </a>
 
+    <!-- ========================= -->
+    <!-- MENÚ -->
+    <!-- ========================= -->
+
     <div class="nav-links">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Inicio</a>
-      <a routerLink="/eventos">Eventos</a>
+
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+
+        Inicio
+
+      </a>
+
+      <a routerLink="/eventos" routerLinkActive="active">
+
+        Eventos
+
+      </a>
+
+      <a href="#">
+
+        Categorías
+
+      </a>
+
+      <a href="#">
+
+        Organizar
+
+      </a>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- BUSCADOR -->
+    <!-- ========================= -->
+
+    <div class="search-box">
+
+      <i class="bi bi-search"></i>
+
+      <input type="text" placeholder="Buscar eventos..." />
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- USUARIO -->
+    <!-- ========================= -->
+
+    <div class="nav-actions">
 
       <ng-container *ngIf="!isLoggedIn">
-        <a routerLink="/login" class="link-login">Iniciar sesión</a>
-        <a routerLink="/register" class="btn-nav">Registrarse</a>
+
+        <a routerLink="/login" class="btn-login">
+
+          Iniciar sesión
+
+        </a>
+
+        <a routerLink="/register" class="btn btn-primary">
+
+          Registrarse
+
+        </a>
+
       </ng-container>
 
       <ng-container *ngIf="isLoggedIn">
-        <a [routerLink]="getDashboardRoute()" class="link-login">Mi panel</a>
+
+        <a [routerLink]="getDashboardRoute()" class="btn-login">
+
+          Mi Panel
+
+        </a>
+
         <div class="user-pill">
-          <span class="user-initial">{{ userName.charAt(0).toUpperCase() }}</span>
-          <span class="user-name">{{ userName }}</span>
+
+          <div class="user-avatar">
+
+            {{ userName.charAt(0).toUpperCase() }}
+
+          </div>
+
+          <div class="user-info">
+
+            <span>
+
+              {{ userName }}
+
+            </span>
+
+            <small>
+
+              {{ userRol }}
+
+            </small>
+
+          </div>
+
         </div>
-        <button class="btn-logout" (click)="logout()">Salir</button>
+
+        <button class="btn btn-outline" (click)="logout()">
+
+          Salir
+
+        </button>
+
       </ng-container>
+
     </div>
 
-    <button class="hamburger" (click)="toggleMenu()" aria-label="Menú">
-      <span></span><span></span><span></span>
+    <!-- ========================= -->
+    <!-- HAMBURGER -->
+    <!-- ========================= -->
+
+    <button class="hamburger" (click)="toggleMenu()">
+
+      <i class="bi bi-list"></i>
+
     </button>
+
   </div>
 
+  <!-- ========================= -->
+  <!-- MOBILE MENU -->
+  <!-- ========================= -->
+
   <div class="mobile-menu" [class.open]="menuOpen">
-    <a routerLink="/"        (click)="menuOpen=false">Inicio</a>
-    <a routerLink="/eventos" (click)="menuOpen=false">Eventos</a>
+
+    <a routerLink="/" (click)="menuOpen=false">
+
+      Inicio
+
+    </a>
+
+    <a routerLink="/eventos" (click)="menuOpen=false">
+
+      Eventos
+
+    </a>
+
+    <a>
+
+      Categorías
+
+    </a>
+
+    <a>
+
+      Organizar
+
+    </a>
+
     <ng-container *ngIf="!isLoggedIn">
-      <a routerLink="/login"    (click)="menuOpen=false">Iniciar sesión</a>
-      <a routerLink="/register" (click)="menuOpen=false" class="mobile-btn">Registrarse</a>
+
+      <a routerLink="/login" (click)="menuOpen=false">
+
+        Iniciar sesión
+
+      </a>
+
+      <a routerLink="/register" class="btn btn-primary" (click)="menuOpen=false">
+
+        Registrarse
+
+      </a>
+
     </ng-container>
+
     <ng-container *ngIf="isLoggedIn">
-      <a [routerLink]="getDashboardRoute()" (click)="menuOpen=false">Mi panel</a>
-      <button (click)="logout(); menuOpen=false" class="mobile-btn-logout">Cerrar sesión</button>
+
+      <a [routerLink]="getDashboardRoute()" (click)="menuOpen=false">
+
+        Mi Panel
+
+      </a>
+
+      <button class="btn btn-outline" (click)="logout(); menuOpen=false">
+
+        Salir
+
+      </button>
+
     </ng-container>
+
   </div>
+
 </nav>

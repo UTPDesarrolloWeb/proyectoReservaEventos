@@ -13,11 +13,11 @@ export class ReservaService {
 
     crearReserva(eventoId: number, cantidadEntradas: number): Observable<Reserva> {
         const params = new HttpParams().set('cantidadEntradas', cantidadEntradas);
-        return this.http.post<Reserva>(`${this.api}/evento/${eventoId}`, {}, { params });
+        return this.http.post<Reserva>(`${this.api}/evento/${eventoId}`, null, { params });
     }
 
     cancelarReserva(reservaId: number): Observable<Reserva> {
-        return this.http.put<Reserva>(`${this.api}/${reservaId}/cancelar`, {});
+        return this.http.put<Reserva>(`${this.api}/${reservaId}/cancelar`, null);
     }
 
     misReservas(): Observable<Reserva[]> {

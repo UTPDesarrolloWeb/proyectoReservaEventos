@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://Evently/api'
+  apiUrl: 'http://localhost:8080/api',
+  apiReservas: 'http://localhost:8080/api/reservas'
 };

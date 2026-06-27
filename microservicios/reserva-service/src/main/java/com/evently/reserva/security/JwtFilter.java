@@ -26,27 +26,44 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
-        String token = null;
-        String email = null;
-        String role = null;
+        try {
+            String authHeader = request.getHeader("Authorization");
+            String token = null;
+            String email = null;
+            String role = null;
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            email = jwtUtil.extractEmail(token);
-            role = jwtUtil.extractRole(token);
-        }
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+                email = jwtUtil.extractEmail(token);
+                role = jwtUtil.extractRole(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            if (jwtUtil.validateToken(token)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        role != null ? List.of(new SimpleGrantedAuthority("ROLE_" + role)) : List.of());
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                // Log preventivo para ver en consola qué datos viajan
+                System.out.println("====== RESERVA JWT FILTER ======");
+                System.out.println("Email extraido: " + email);
+                System.out.println("Rol extraido: " + role);
             }
+
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (jwtUtil.validateToken(token)) {
+                    // 1. Creamos la autoridad exacta asegurándonos de que no sea null
+                    String rolLimpio = (role != null) ? role : "CLIENTE";
+                    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(rolLimpio));
+
+                    // 2. Usamos el constructor estricto de Spring para usuarios
+                    // autenticados:(principal, credentials, authorities)
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            email,
+                            null,
+                            authorities);
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("Autenticación inyectada con éxito para reservas con autoridad: " + rolLimpio);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error procesando el JWT en Reserva-Service: " + e.getMessage());
+            e.printStackTrace();
         }
 
         filterChain.doFilter(request, response);

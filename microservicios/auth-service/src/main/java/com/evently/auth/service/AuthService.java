@@ -47,6 +47,7 @@ public class AuthService {
         response.put("mensaje", "Usuario registrado exitosamente");
         response.put("token", token);
         response.put("rol", usuario.getRol());
+        response.put("email", usuario.getEmail());
 
         return response;
     }
@@ -66,6 +67,7 @@ public class AuthService {
         response.put("token", token);
         response.put("rol", usuario.getRol());
         response.put("nombre", usuario.getNombre());
+        response.put("email", usuario.getEmail());
 
         return response;
     }

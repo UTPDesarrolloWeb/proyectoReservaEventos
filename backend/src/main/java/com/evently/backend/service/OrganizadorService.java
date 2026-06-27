@@ -62,8 +62,7 @@ public class OrganizadorService {
     // Busca el organizador dado un usuario
     public Organizador obtenerPorUsuario(Usuario usuario) {
         return organizadorRepository.findByUsuario(usuario)
-                .orElseThrow(() -> new RuntimeException(
-                        "Organizador no encontrado"));
+                .orElseGet(() -> registrarOrganizador(usuario.getId(), TipoPlan.BASICO));
     }
 
     // Cambiar de plan, puede subirlo o bajarlo

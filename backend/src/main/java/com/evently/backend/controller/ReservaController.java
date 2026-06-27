@@ -15,91 +15,89 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservas")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class ReservaController {
-    @Autowired
-    private ReservaService reservaService;
+        @Autowired
+        private ReservaService reservaService;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+        @Autowired
+        private UsuarioRepository usuarioRepository;
 
-    // Crea la reserva - uso del Cliente
-    @PostMapping("/evento/{eventoId}")
-    @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<Reserva> crearReserva(
-            @PathVariable Long eventoId,
-            @RequestParam int cantidadEntradas,
-            Authentication authentication) {
+        // Crea la reserva - uso del Cliente
+        @PostMapping("/evento/{eventoId}")
+        @PreAuthorize("hasAuthority('CLIENTE')")
+        public ResponseEntity<Reserva> crearReserva(
+                        @PathVariable Long eventoId,
+                        @RequestParam int cantidadEntradas,
+                        Authentication authentication) {
 
-        Usuario cliente = usuarioRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                Usuario cliente = usuarioRepository
+                                .findByEmail(authentication.getName())
+                                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return ResponseEntity.ok(
-                reservaService.crearReserva(eventoId,
-                        cantidadEntradas, cliente));
-    }
+                return ResponseEntity.ok(
+                                reservaService.crearReserva(eventoId,
+                                                cantidadEntradas, cliente));
+        }
 
-    // Cancela la reserva - uso del cliente
-    @PutMapping("/{reservaId}/cancelar")
-    @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<Reserva> cancelarReserva(
-            @PathVariable Long reservaId,
-            Authentication authentication) {
+        // Cancela la reserva - uso del cliente
+        @PutMapping("/{reservaId}/cancelar")
+        @PreAuthorize("hasAuthority('CLIENTE')")
+        public ResponseEntity<Reserva> cancelarReserva(
+                        @PathVariable Long reservaId,
+                        Authentication authentication) {
 
-        Usuario cliente = usuarioRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                Usuario cliente = usuarioRepository
+                                .findByEmail(authentication.getName())
+                                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return ResponseEntity.ok(
-                reservaService.cancelarReserva(reservaId, cliente));
-    }
+                return ResponseEntity.ok(
+                                reservaService.cancelarReserva(reservaId, cliente));
+        }
 
-    // Mis reservas trae todo - uso del cliente
-    @GetMapping("/mis-reservas")
-    @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<List<Reserva>> misReservas(
-            Authentication authentication) {
+        // Mis reservas trae todo - uso del cliente
+        @GetMapping("/mis-reservas")
+        @PreAuthorize("hasAuthority('CLIENTE')")
+        public ResponseEntity<List<Reserva>> misReservas(
+                        Authentication authentication) {
 
-        Usuario cliente = usuarioRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                Usuario cliente = usuarioRepository
+                                .findByEmail(authentication.getName())
+                                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return ResponseEntity.ok(reservaService.misReservas(cliente));
-    }
+                return ResponseEntity.ok(reservaService.misReservas(cliente));
+        }
 
-    // Mis reservas con paginación - uso del cliente
-    @GetMapping("/mis-reservas/paginado")
-    @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<Page<Reserva>> misReservasPaginadas(
-            @RequestParam(defaultValue = "0") int pagina,
-            @RequestParam(defaultValue = "5") int cantidad,
-            Authentication authentication) {
+        // Mis reservas con paginación - uso del cliente
+        @GetMapping("/mis-reservas/paginado")
+        @PreAuthorize("hasAuthority('CLIENTE')")
+        public ResponseEntity<Page<Reserva>> misReservasPaginadas(
+                        @RequestParam(defaultValue = "0") int pagina,
+                        @RequestParam(defaultValue = "5") int cantidad,
+                        Authentication authentication) {
 
-        Usuario cliente = usuarioRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException(
-                        "Usuario no encontrado"));
+                Usuario cliente = usuarioRepository
+                                .findByEmail(authentication.getName())
+                                .orElseThrow(() -> new RuntimeException(
+                                                "Usuario no encontrado"));
 
-        return ResponseEntity.ok(
-                reservaService.misReservasPaginadas(
-                        cliente, pagina, cantidad));
-    }
+                return ResponseEntity.ok(
+                                reservaService.misReservasPaginadas(
+                                                cliente, pagina, cantidad));
+        }
 
-    // Reservas realizadas de un evento - uso del Organizador
-    @GetMapping("/evento/{eventoId}")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
-    public ResponseEntity<List<Reserva>> reservasPorEvento(
-            @PathVariable Long eventoId,
-            Authentication authentication) {
+        // Reservas realizadas de un evento - uso del Organizador
+        @GetMapping("/evento/{eventoId}")
+        @PreAuthorize("hasAuthority('ORGANIZADOR')")
+        public ResponseEntity<List<Reserva>> reservasPorEvento(
+                        @PathVariable Long eventoId,
+                        Authentication authentication) {
 
-        Usuario organizador = usuarioRepository
-                .findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                Usuario organizador = usuarioRepository
+                                .findByEmail(authentication.getName())
+                                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        return ResponseEntity.ok(
-                reservaService.reservasPorEvento(eventoId, organizador));
-    }
-
-
+                return ResponseEntity.ok(
+                                reservaService.reservasPorEvento(eventoId, organizador));
+        }
 }

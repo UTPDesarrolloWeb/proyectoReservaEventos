@@ -173,9 +173,9 @@ public class EventoService {
                 .map(Evento::getTitulo)
                 .orElse("Sin eventos");
 
-        double tasaPromedio = todosEventos.isEmpty() ? 0 :
-                todosEventos.stream()
-                        .mapToDouble(e -> ((double)(e.getAforo() - e.getAforoDisponible()) / e.getAforo()) * 100)
+        double tasaPromedio = todosEventos.isEmpty() ? 0
+                : todosEventos.stream()
+                        .mapToDouble(e -> ((double) (e.getAforo() - e.getAforoDisponible()) / e.getAforo()) * 100)
                         .average()
                         .orElse(0);
 

@@ -23,7 +23,16 @@ public class PlanService {
 
     public Plan obtenerPlanPorTipo(TipoPlan tipo) {
         return planRepository.findByNombre(tipo)
-                .orElseThrow(() -> new RuntimeException("Plan no encontrado: " + tipo));
+                .orElseGet(() -> {
+                    Plan nuevo = new Plan();
+                    nuevo.setNombre(tipo);
+                    nuevo.setPrecio(0.0);
+                    nuevo.setLimiteEventos(50);
+                    nuevo.setActivo(true);
+                    nuevo.setComisionPorcentaje(5.0);
+                    nuevo.setDescripcion("Plan " + tipo.name() + " autogenerado");
+                    return planRepository.save(nuevo);
+                });
     }
 
     public Plan crearPlan(Plan plan) {

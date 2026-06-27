@@ -1,6 +1,6 @@
 export type CategoriaEvento =
-    'MUSICA' | 'DEPORTES' | 'TEATRO' | 'CONFERENCIA' |
-    'GASTRONOMIA' | 'ARTE' | 'TECNOLOGIA' | 'OTRO';
+    'CONCIERTO' | 'TALLER' | 'CONFERENCIA' | 'CURSO' |
+    'FESTIVAL' | 'DEPORTE' | 'TEATRO' | 'OTRO';
 
 export type EstadoEvento = 'BORRADOR' | 'PUBLICADO' | 'CANCELADO';
 
