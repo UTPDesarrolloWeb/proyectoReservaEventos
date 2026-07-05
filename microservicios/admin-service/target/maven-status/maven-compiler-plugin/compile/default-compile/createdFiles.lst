@@ -1,9 +1,0 @@
-com\evently\admin\client\PagoClient.class
-com\evently\admin\security\SecurityConfig.class
-com\evently\admin\client\EventoClient.class
-com\evently\admin\controller\AdminController.class
-com\evently\admin\security\JwtFilter.class
-com\evently\admin\client\AuthClient.class
-com\evently\admin\AdminServiceApplication.class
-com\evently\admin\service\AdminService.class
-com\evently\admin\security\JwtUtil.class

@@ -1,6 +1,5 @@
 <div class="page">
-
-    <!-- Loading -->
+    <!--Loading-->
     <div class="estado-center" *ngIf="loading">
         <div class="spinner"></div>
         <p>Cargando evento...</p>
@@ -94,7 +93,7 @@
                 <div class="reserva-card">
 
                     <!-- Éxito -->
-                    <div class="reserva-exito" *ngIf="reservaExito">
+                    <div class="reserva-exito" *ngIf="reservaExito && !mostrarModalPago">
                         <div class="exito-icon"></div>
                         <h3>¡Reserva realizada!</h3>
                         <p>Tu reserva fue confirmada. Revisa tus reservas para ver el código QR.</p>
@@ -164,4 +163,23 @@
 
         </div>
     </ng-container>
+
+    <div class="modal-overlay" *ngIf="mostrarModalPago && reservaCreada">
+        <div class="modal-container">
+            <h2>💳 Confirmar y Pagar Reserva</h2>
+            <hr>
+            <div class="modal-body">
+                <p><strong>Evento:</strong> {{ evento?.titulo }}</p>
+                <p><strong>Reserva Código:</strong> #{{ reservaCreada.id }}</p>
+                <p><strong>Entradas solicitadas:</strong> {{ cantidadEntradas }}</p>
+                <p class="precio-total"><strong>Total a pagar:</strong> S/ {{ totalPagar.toFixed(2) }}</p>
+            </div>
+
+            <div class="modal-actions">
+                <button (click)="cerrarModal()" class="btn-cancelar">Volver</button>
+                <button (click)="procesarPagoMock()" class="btn-pagar">Simular Pago Completo</button>
+            </div>
+        </div>
+    </div>
+
 </div>
