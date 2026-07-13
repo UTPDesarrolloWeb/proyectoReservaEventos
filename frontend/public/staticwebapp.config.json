@@ -2,5 +2,9 @@
   "globalHeaders": {
     "Cross-Origin-Opener-Policy": "unsafe-none",
     "Cross-Origin-Embedder-Policy": "unsafe-none"
+  },
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/assets/**/*", "/api/**/*", "/*.js", "/*.css", "/*.png", "/*.ico"]
   }
 }
