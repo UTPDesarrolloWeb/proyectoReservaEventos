@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
-@FeignClient(name = "evento-service", url = "http://localhost:8082")
+@FeignClient(name = "evento-service", url = "${evento.service.url:http://evento-service:8082}")
 public interface EventoClient {
     @GetMapping("/api/organizadores/plan/{tipoPlan}")
     List<Object> organizadoresPorPlan(@PathVariable("tipoPlan") String tipoPlan);

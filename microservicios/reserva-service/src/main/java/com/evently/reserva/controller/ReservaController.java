@@ -76,4 +76,16 @@ public class ReservaController {
         UsuarioDTO organizador = authClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(reservaService.reservasPorEvento(eventoId, organizador));
     }
+
+    // Endpoint interno para obtener una reserva por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Reserva> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(reservaService.obtenerPorId(id));
+    }
+
+    // Endpoint interno para confirmar una reserva (llamado desde pago-service)
+    @PutMapping("/{id}/confirmar")
+    public ResponseEntity<Reserva> confirmarReserva(@PathVariable Long id) {
+        return ResponseEntity.ok(reservaService.confirmarReserva(id));
+    }
 }

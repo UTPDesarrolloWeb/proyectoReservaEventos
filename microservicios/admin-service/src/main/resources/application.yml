@@ -13,3 +13,13 @@ logging:
   level:
     org.springframework.web: INFO
     com.evently: DEBUG
+
+auth:
+  service:
+    url: ${AUTH_SERVICE_URL:http://auth-service:8081}
+pago:
+  service:
+    url: ${PAGO_SERVICE_URL:http://pago-service:8084}
+evento:
+  service:
+    url: ${EVENTO_SERVICE_URL:http://evento-service:8082}

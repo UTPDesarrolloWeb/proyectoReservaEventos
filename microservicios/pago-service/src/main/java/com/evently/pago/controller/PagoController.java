@@ -101,4 +101,21 @@ public class PagoController {
                 .header("Content-Disposition", "attachment; filename=boleta-" + reservaId + ".pdf")
                 .body(pdf);
     }
+
+    // Crear sesión de pago en Stripe
+    @PostMapping("/stripe/session/{reservaId}")
+    @PreAuthorize("hasRole('CLIENTE')")
+    public ResponseEntity<java.util.Map<String, String>> crearSessionPago(@PathVariable Long reservaId) {
+        return ResponseEntity.ok(pagoService.crearSessionPago(reservaId));
+    }
+
+    // Webhook para recibir notificaciones de Stripe
+    @PostMapping("/stripe/webhook")
+    public ResponseEntity<Void> recibirWebhook(
+            @RequestBody String payload,
+            @RequestHeader("Stripe-Signature") String sigHeader) {
+        pagoService.procesarWebhookStripe(payload, sigHeader);
+        return ResponseEntity.ok().build();
+    }
 }
+

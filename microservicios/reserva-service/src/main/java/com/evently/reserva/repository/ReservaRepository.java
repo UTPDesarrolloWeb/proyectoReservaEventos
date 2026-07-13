@@ -14,4 +14,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     Page<Reserva> findByClienteId(Long clienteId, Pageable pageable);
     List<Reserva> findByEventoId(Long eventoId);
     boolean existsByClienteIdAndEventoId(Long clienteId, Long eventoId);
+    boolean existsByClienteIdAndEventoIdAndEstadoIn(Long clienteId, Long eventoId, java.util.List<com.evently.reserva.model.EstadoReserva> estados);
 }

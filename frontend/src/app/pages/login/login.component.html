@@ -1,6 +1,6 @@
 <div class="page-wrapper">
-  <div class="card">
-
+  <!-- Header normal -->
+  <div class="card" *ngIf="!mfaRequired">
     <div class="card-header">
       <div class="icon-circle">
         <span class="material-symbols-outlined" style="font-size: 28px;">login</span>
@@ -11,7 +11,6 @@
 
     <div class="card-content">
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-
         <div class="alert-error" *ngIf="error">{{ error }}</div>
 
         <div class="field">
@@ -30,16 +29,54 @@
             <span class="spinner"></span> Ingresando...
           </span>
         </button>
-
-
-
       </form>
+
+      <div class="divider-container">
+        <span class="divider-text">O iniciar con Google</span>
+      </div>
+
+      <div class="google-btn-wrapper">
+        <div id="google-btn"></div>
+      </div>
     </div>
 
     <div class="card-footer">
       <p>¿No tienes cuenta?
         <a routerLink="/register" class="link">Regístrate aquí</a>
       </p>
+    </div>
+  </div>
+
+  <!-- Header & Formulario 2FA -->
+  <div class="card" *ngIf="mfaRequired">
+    <div class="card-header">
+      <div class="icon-circle" style="background-color: #eff6ff; color: #2563eb;">
+        <span class="material-symbols-outlined" style="font-size: 28px;">mark_email_read</span>
+      </div>
+      <h1 class="card-title">Verificación de 2 Pasos</h1>
+      <p class="card-description">Hemos enviado un código OTP de 6 dígitos a tu Gmail para verificar tu identidad.</p>
+    </div>
+
+    <div class="card-content">
+      <form (ngSubmit)="onVerifyOtp()" #otpForm="ngForm">
+        <div class="alert-error" *ngIf="error">{{ error }}</div>
+
+        <div class="field">
+          <label for="otpCode">Código de Verificación</label>
+          <input id="otpCode" type="text" placeholder="••••••" [(ngModel)]="otpCode" name="otpCode" required minlength="6" maxlength="6" pattern="[0-9]*" class="otp-input" />
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="loading || otpForm.invalid">
+          <span *ngIf="!loading">Verificar Código</span>
+          <span *ngIf="loading" class="spinner-row">
+            <span class="spinner"></span> Verificando...
+          </span>
+        </button>
+
+        <button type="button" class="btn-secondary" (click)="cancelMfa()">
+          Regresar a Iniciar Sesión
+        </button>
+      </form>
     </div>
   </div>
 </div>

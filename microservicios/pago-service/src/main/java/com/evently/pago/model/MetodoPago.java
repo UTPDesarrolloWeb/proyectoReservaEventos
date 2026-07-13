@@ -4,5 +4,6 @@ public enum MetodoPago {
     STRIPE,
     PAYPAL,
     YAPE,
-    PLIN
+    PLIN,
+    MERCADO_PAGO
 }

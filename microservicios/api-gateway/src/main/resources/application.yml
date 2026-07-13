@@ -23,42 +23,48 @@ spring:
       routes:
         # Auth Service
         - id: auth-service
-          uri: http://auth-service:8081
+          uri: ${AUTH_SERVICE_URL:http://auth-service:8081}
           predicates:
             - Path=/api/auth/**
 
         # Evento Service
         - id: evento-service
-          uri: http://evento-service:8082
+          uri: ${EVENTO_SERVICE_URL:http://evento-service:8082}
           predicates:
             - Path=/api/eventos/**, /api/organizadores/**, /api/planes/**
 
         # Reserva Service
         - id: reserva-service
-          uri: http://reserva-service:8083
+          uri: ${RESERVA_SERVICE_URL:http://reserva-service:8083}
           predicates:
             - Path=/api/reservas/**
 
         # Pago Service
         - id: pago-service
-          uri: http://pago-service:8084
+          uri: ${PAGO_SERVICE_URL:http://pago-service:8084}
           predicates:
             - Path=/api/pagos/**
 
         # Admin Service
         - id: admin-service
-          uri: http://admin-service:8086
+          uri: ${ADMIN_SERVICE_URL:http://admin-service:8086}
           predicates:
             - Path=/api/admin/**
 
         # Notificacion Service
         - id: notificacion-service
-          uri: http://notificacion-service:8085
+          uri: ${NOTIFICACION_SERVICE_URL:http://notificacion-service:8085}
           predicates:
             - Path=/api/notificaciones/**
 
+        # Two-Factor Service
+        - id: two-factor-service
+          uri: ${TWO_FACTOR_SERVICE_URL:http://two-factor-service:8087}
+          predicates:
+            - Path=/api/2fa/**
+
         # WebSocket Notificaciones
         - id: websocket-route
-          uri: ws://notificacion-service:8085
+          uri: ${NOTIFICACION_WS_URL:ws://notificacion-service:8085}
           predicates:
             - Path=/ws/**

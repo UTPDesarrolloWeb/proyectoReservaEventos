@@ -6,6 +6,7 @@ public class ReservaDTO {
     private Long eventoId;
     private Integer cantidadEntradas;
     private Double montoTotal;
+    private String codigoQR;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -17,4 +18,6 @@ public class ReservaDTO {
     public void setCantidadEntradas(Integer cantidadEntradas) { this.cantidadEntradas = cantidadEntradas; }
     public Double getMontoTotal() { return montoTotal; }
     public void setMontoTotal(Double montoTotal) { this.montoTotal = montoTotal; }
+    public String getCodigoQR() { return codigoQR; }
+    public void setCodigoQR(String codigoQR) { this.codigoQR = codigoQR; }
 }

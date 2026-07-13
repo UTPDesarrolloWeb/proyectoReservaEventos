@@ -1,0 +1,55 @@
+name: Deploy Frontend to Azure Static Web Apps
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Replace API URL Placeholder
+        run: |
+          node -e "
+            const fs = require('fs');
+            const file = 'frontend/src/environments/environment.prod.ts';
+            let content = fs.readFileSync(file, 'utf8');
+            content = content.replace(/API_GATEWAY_URL_PLACEHOLDER/g, '${{ secrets.API_GATEWAY_URL }}');
+            fs.writeFileSync(file, content);
+            console.log('Replaced placeholder successfully in environment.prod.ts');
+          "
+
+      - name: Build Angular Application
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Deploy to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "/" # Relative to repository root
+          output_location: "frontend/dist/frontend/browser" # Relative to repository root
+          skip_app_build: true

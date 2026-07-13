@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ReservaService } from '../../services/reserva.service';
+import { PagoService } from '../../services/pago.service';
 import { Reserva } from '../../models/reserva.model';
 
 @Component({
@@ -24,11 +25,21 @@ export class ReservasComponent implements OnInit {
 
   mostrarQR: Reserva | null = null;
 
-  constructor(private reservaService: ReservaService) { }
+  pagandoId: number | null = null;
+  pagoExitoMsg = '';
+  pagoErrorMsg = '';
+
+  constructor(
+    private reservaService: ReservaService,
+    private pagoService: PagoService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.cargarReservas();
+    this.detectarPagoStatus();
   }
+
 
   cargarReservas() {
     this.loading = true;
@@ -111,4 +122,62 @@ export class ReservasComponent implements OnInit {
   get totalConfirmadas(): number { return this.reservas.filter(r => r.estado === 'CONFIRMADA').length; }
   get totalPendientes(): number { return this.reservas.filter(r => r.estado === 'PENDIENTE').length; }
   get totalCanceladas(): number { return this.reservas.filter(r => r.estado === 'CANCELADA').length; }
+
+  detectarPagoStatus() {
+    this.route.queryParams.subscribe(params => {
+      const status = params['payment_status'];
+      const reservaId = params['reservaId'];
+      if (status && reservaId) {
+        if (status === 'success') {
+          this.pagoService.procesarPago(reservaId, 'STRIPE').subscribe({
+            next: () => {
+              this.pagoExitoMsg = `¡Pago aprobado para la reserva #${reservaId}! Actualizando estado...`;
+              // Polling: reintenta hasta 10 veces (cada 1s) hasta que la reserva cambie a CONFIRMADA
+              let intentos = 0;
+              const maxIntentos = 10;
+              const intervalo = setInterval(() => {
+                intentos++;
+                this.cargarReservas();
+                const reserva = this.reservas.find(r => r.id == reservaId);
+                if ((reserva && reserva.estado === 'CONFIRMADA') || intentos >= maxIntentos) {
+                  clearInterval(intervalo);
+                  this.pagoExitoMsg = `¡Pago aprobado! Tu reserva #${reservaId} ha sido confirmada y se ha enviado la boleta a tu correo.`;
+                }
+              }, 1000);
+            },
+            error: (err) => {
+              console.error('Error confirmando pago', err);
+              this.pagoErrorMsg = 'El pago se realizó, pero hubo un problema al actualizar la reserva.';
+            }
+          });
+        } else if (status === 'failure') {
+          this.pagoErrorMsg = `El pago para la reserva #${reservaId} fue rechazado o cancelado. Por favor, intenta de nuevo.`;
+        } else if (status === 'pending') {
+          this.pagoExitoMsg = `El pago para la reserva #${reservaId} está en proceso. Te notificaremos una vez que sea aprobado.`;
+        }
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
+  }
+
+  pagarConStripe(reserva: Reserva) {
+    this.pagandoId = reserva.id;
+    this.pagoErrorMsg = '';
+    this.pagoExitoMsg = '';
+
+    this.pagoService.crearSessionPago(reserva.id).subscribe({
+      next: (res) => {
+        if (res && res.sessionUrl) {
+          window.location.href = res.sessionUrl;
+        } else {
+          this.pagoErrorMsg = 'No se recibió la URL de pago de Stripe.';
+          this.pagandoId = null;
+        }
+      },
+      error: (err) => {
+        this.pagoErrorMsg = err?.error?.message ?? 'Error al iniciar el pago con Stripe.';
+        this.pagandoId = null;
+      }
+    });
+  }
 }
