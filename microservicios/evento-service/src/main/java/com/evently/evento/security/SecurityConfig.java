@@ -28,6 +28,7 @@ public class SecurityConfig {
                         // Rutas públicas
                         .requestMatchers("/api/eventos/publicos/**").permitAll()
                         .requestMatchers("/api/eventos/buscar/**").permitAll()
+                        .requestMatchers("/api/eventos/recomendados").permitAll()
                         .requestMatchers("/api/planes/**").permitAll()
                         .requestMatchers("/api/eventos/*/interno").permitAll()
                         .requestMatchers("/api/eventos/*/aforo").permitAll()
