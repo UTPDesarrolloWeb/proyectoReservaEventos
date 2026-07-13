@@ -5,6 +5,6 @@
   },
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/**/*", "/api/**/*", "/*.js", "/*.css", "/*.png", "/*.ico"]
+    "exclude": ["/assets/*", "/api/*", "/*.js", "/*.css", "/*.png", "/*.ico"]
   }
 }
