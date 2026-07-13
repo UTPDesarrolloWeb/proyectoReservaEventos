@@ -42,7 +42,7 @@ public class PlanController {
     }
 
     @PutMapping("/{id}/reactivar")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Plan> reactivarPlan(@PathVariable Long id) {
         return ResponseEntity.ok(planService.reactivarPlan(id));
     }

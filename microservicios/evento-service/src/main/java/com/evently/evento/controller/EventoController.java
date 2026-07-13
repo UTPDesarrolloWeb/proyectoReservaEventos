@@ -35,28 +35,28 @@ public class EventoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Evento> crearEvento(@RequestBody Evento evento, Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.crearEvento(evento, usuario));
     }
 
     @PutMapping("/{id}/publicar")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Evento> publicarEvento(@PathVariable Long id, Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.publicarEvento(id, usuario));
     }
 
     @PutMapping("/{id}/cancelar")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Evento> cancelarEvento(@PathVariable Long id, Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.cancelarEvento(id, usuario));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Evento> editarEvento(@PathVariable Long id, @RequestBody Evento evento,
             Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
@@ -72,14 +72,14 @@ public class EventoController {
     }
 
     @GetMapping("/mis-eventos")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<List<Evento>> misEventos(Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.listarMisEventos(usuario));
     }
 
     @GetMapping("/{id}/estadistica")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Map<String, Object>> estadisticaOcupacion(@PathVariable Long id,
             Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
@@ -87,14 +87,14 @@ public class EventoController {
     }
 
     @GetMapping("/recomendados")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<List<Evento>> recomendados(Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.recomendarEventos(usuario));
     }
 
     @GetMapping("/mis-estadisticas")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Map<String, Object>> misEstadisticas(Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(eventoService.misEstadisticas(usuario));
