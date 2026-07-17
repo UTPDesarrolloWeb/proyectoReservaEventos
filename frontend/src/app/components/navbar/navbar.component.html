@@ -46,17 +46,30 @@
 
       </a>
 
-      <a href="#">
+      <div class="dropdown-categorias">
 
-        Categorías
+        <button class="dropdown-btn" (click)="toggleCategorias()">
 
-      </a>
+          Categorías
 
-      <a href="#">
+          <i class="bi" [class.bi-chevron-down]="!categoriasOpen" [class.bi-chevron-up]="categoriasOpen">
+          </i>
 
-        Organizar
+        </button>
 
-      </a>
+        <div class="dropdown-menu" *ngIf="categoriasOpen">
+
+          <button *ngFor="let categoria of categorias" (click)="seleccionarCategoria(categoria.valor)">
+
+            <i class="bi" [class]="categoria.icono"></i>
+
+            {{ categoria.nombre }}
+
+          </button>
+
+        </div>
+
+      </div>
 
     </div>
 

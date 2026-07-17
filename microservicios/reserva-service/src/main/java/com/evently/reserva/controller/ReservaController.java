@@ -35,18 +35,6 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.crearReserva(eventoId, cantidadEntradas, cliente));
     }
 
-    // Obtener una reserva por ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Reserva> obtenerPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(reservaService.obtenerPorId(id));
-    }
-
-    // Confirmar la reserva tras un pago exitoso
-    @PutMapping("/{id}/confirmar")
-    public ResponseEntity<Reserva> confirmarReserva(@PathVariable Long id) {
-        return ResponseEntity.ok(reservaService.confirmarReserva(id));
-    }
-
     // Cancela la reserva - uso del cliente
     @PutMapping("/{reservaId}/cancelar")
     // @PreAuthorize("hasAuthority('CLIENTE')")
