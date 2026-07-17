@@ -23,4 +23,6 @@ public class RegisterRequest {
 
     @NotNull
     private Rol rol;
+
+    private String telefono;
 }

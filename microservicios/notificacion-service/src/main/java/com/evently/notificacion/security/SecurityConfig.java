@@ -31,6 +31,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/planes/**").permitAll()
                         .requestMatchers("/api/eventos/*/interno").permitAll()
                         .requestMatchers("/api/eventos/*/aforo").permitAll()
+                        // Endpoint interno service-to-service (WhatsApp)
+                        .requestMatchers("/api/notificaciones/whatsapp").permitAll()
                         // Todo lo demás requiere token
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

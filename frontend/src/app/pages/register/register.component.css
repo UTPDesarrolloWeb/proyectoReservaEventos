@@ -178,3 +178,46 @@
   text-decoration: none;
 }
 .link:hover { text-decoration: underline; }
+
+.divider-container {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.25rem 0;
+}
+
+.divider-container::before,
+.divider-container::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.divider-text {
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  color: #717182;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+#google-btn-register {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.google-note {
+  font-size: 0.75rem;
+  color: #717182;
+  text-align: center;
+  margin: 0;
+}

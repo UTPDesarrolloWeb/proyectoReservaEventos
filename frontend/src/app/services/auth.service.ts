@@ -16,9 +16,29 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
+  login(credentials: LoginRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+      tap(response => {
+        if (!response.mfaRequired) {
+          this.saveSession(response);
+        }
+      })
+    );
+  }
+
+  verify2fa(email: string, codigo: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login/verify-2fa`, { email, codigo }).pipe(
       tap(response => this.saveSession(response))
+    );
+  }
+
+  loginGoogle(idToken: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login/google`, { idToken }).pipe(
+      tap(response => {
+        if (response && !response.mfaRequired) {
+          this.saveSession(response);
+        }
+      })
     );
   }
 

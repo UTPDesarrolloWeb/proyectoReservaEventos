@@ -5,7 +5,8 @@ $folders = @(
     "notificacion-service",
     "pago-service",
     "reserva-service",
-    "admin-service"
+    "admin-service",
+    "two-factor-service"
 )
 
 Write-Host "Iniciando compilacion de microservicios..." -ForegroundColor Cyan

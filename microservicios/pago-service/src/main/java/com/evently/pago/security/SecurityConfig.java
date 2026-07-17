@@ -25,14 +25,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas públicas
-                        .requestMatchers("/api/eventos/publicos/**").permitAll()
-                        .requestMatchers("/api/eventos/buscar/**").permitAll()
-                        .requestMatchers("/api/planes/**").permitAll()
-                        .requestMatchers("/api/eventos/*/interno").permitAll()
-                        .requestMatchers("/api/eventos/*/aforo").permitAll()
-                        // Todo lo demás requiere token
-                        .anyRequest().authenticated())
+                        // Permitir todas las peticiones PREFLIGHT (OPTIONS) del navegador
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        
+                        // Permitir webhooks
+                        .requestMatchers("/api/pagos/mercado-pago/webhook").permitAll()
+                        .requestMatchers("/api/pagos/stripe/webhook").permitAll()
+
+                        // ABRIMOS TODAS LAS RUTAS EN EL FILTRO GENERAL:
+                        // La seguridad real se aplica con @PreAuthorize en los Controladores
+                        .anyRequest().permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

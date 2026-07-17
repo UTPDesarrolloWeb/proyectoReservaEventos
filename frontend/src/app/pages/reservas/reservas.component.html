@@ -40,6 +40,22 @@
             </div>
         </div>
 
+        <!-- Alertas de Pago -->
+        <div class="alert-success" *ngIf="pagoExitoMsg" style="margin-bottom: 1rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            {{ pagoExitoMsg }}
+        </div>
+        <div class="alert-error" *ngIf="pagoErrorMsg" style="margin-bottom: 1rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            {{ pagoErrorMsg }}
+        </div>
+
         <!-- Error cancelación -->
         <div class="alert-error" *ngIf="cancelError">{{ cancelError }}</div>
 
@@ -145,6 +161,24 @@
                         Ver evento
                     </a>
 
+                    <!-- Pagar con Stripe -->
+                    <button class="btn-pagar"
+                        *ngIf="reserva.estado === 'PENDIENTE' && reserva.montoTotal > 0"
+                        (click)="pagarConStripe(reserva)" [disabled]="pagandoId === reserva.id">
+                        <span *ngIf="pagandoId !== reserva.id" style="display: inline-flex; align-items: center; gap: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="4" width="20" height="16" rx="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" />
+                            </svg>
+                            Pagar con Stripe
+                        </span>
+                        <span *ngIf="pagandoId === reserva.id" class="spinner-row">
+                            <span class="spinner-sm" style="border-color: rgba(255,255,255,0.3); border-top-color: #ffffff;"></span> Redirigiendo...
+                        </span>
+                    </button>
+
+
                     <!-- Cancelar -->
                     <button class="btn-cancelar"
                         *ngIf="reserva.estado === 'PENDIENTE' || reserva.estado === 'CONFIRMADA'"
@@ -171,7 +205,7 @@
             <button class="modal-close" (click)="cerrarQR()">✕</button>
         </div>
         <div class="modal-body">
-            <img [src]="mostrarQR.codigoQR" alt="Código QR" class="qr-img" />
+            <img [src]="'data:image/png;base64,' + mostrarQR.codigoQR" alt="Código QR" class="qr-img" />
             <p class="qr-hint">Presenta este código en la entrada del evento</p>
         </div>
     </div>

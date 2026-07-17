@@ -21,6 +21,7 @@ services:
       - ./microservicios/auth-service/.env
     environment:
       - SERVER_PORT=8081
+      - TWO_FACTOR_SERVICE_URL=http://two-factor-service:8087
     networks:
       - evently-network
 
@@ -81,6 +82,18 @@ services:
       - ./microservicios/admin-service/.env
     environment:
       - SERVER_PORT=8086
+    networks:
+      - evently-network
+
+  two-factor-service:
+    build:
+      context: ./microservicios/two-factor-service
+    ports:
+      - "8087:8087"
+    env_file:
+      - ./microservicios/two-factor-service/.env
+    environment:
+      - SERVER_PORT=8087
     networks:
       - evently-network
 

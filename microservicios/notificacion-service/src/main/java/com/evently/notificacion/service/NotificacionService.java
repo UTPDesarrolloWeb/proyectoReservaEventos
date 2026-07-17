@@ -17,6 +17,9 @@ public class NotificacionService {
     @Autowired
     private NotificacionSocket notificacionSocket;
 
+    @Autowired
+    private TwilioWhatsAppService twilioWhatsAppService;
+
     public Notificacion enviarNotificacion(Long usuarioId, String mensaje, TipoNotificacion tipo) {
         Notificacion notificacion = new Notificacion();
         notificacion.setUsuarioId(usuarioId);
@@ -28,6 +31,21 @@ public class NotificacionService {
 
         // Enviar en tiempo real via WebSocket
         notificacionSocket.enviarNotificacionUsuario(usuarioId, mensaje);
+
+        return guardada;
+    }
+
+    /**
+     * Envía notificación completa: BD + WebSocket + WhatsApp (si tiene teléfono)
+     */
+    public Notificacion enviarNotificacionConWhatsApp(Long usuarioId, String mensaje, TipoNotificacion tipo, String telefono) {
+        // Guardar en BD + WebSocket
+        Notificacion guardada = enviarNotificacion(usuarioId, mensaje, tipo);
+
+        // Enviar por WhatsApp si tiene teléfono
+        if (telefono != null && !telefono.isEmpty()) {
+            twilioWhatsAppService.enviarWhatsApp(telefono, mensaje);
+        }
 
         return guardada;
     }

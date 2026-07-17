@@ -25,14 +25,14 @@ public class OrganizadorController {
     private AuthServiceClient authServiceClient;
 
     @PostMapping("/registrar/{tipoPlan}")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Organizador> registrar(@PathVariable TipoPlan tipoPlan, Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         return ResponseEntity.ok(organizadorService.registrarOrganizador(usuario.getId(), tipoPlan));
     }
 
     @GetMapping("/mi-perfil")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Map<String, Object>> miPerfil(Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         Organizador organizador = organizadorService.obtenerPorUsuarioId(usuario.getId());
@@ -50,7 +50,7 @@ public class OrganizadorController {
     }
 
     @PutMapping("/cambiar-plan/{tipoPlan}")
-    @PreAuthorize("hasRole('ORGANIZADOR')")
+    @PreAuthorize("hasAuthority('ORGANIZADOR')")
     public ResponseEntity<Organizador> cambiarPlan(@PathVariable TipoPlan tipoPlan, Authentication authentication) {
         UsuarioDTO usuario = authServiceClient.obtenerUsuarioPorEmail(authentication.getName());
         Organizador organizador = organizadorService.obtenerPorUsuarioId(usuario.getId());

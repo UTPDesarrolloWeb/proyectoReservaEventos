@@ -515,3 +515,44 @@
         justify-content: center;
     }
 }
+
+/* ── Pago / Mercado Pago ── */
+.btn-pagar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #009ee3; /* Mercado Pago Blue */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-pagar:hover:not(:disabled) {
+    background: #007eb5;
+    transform: translateY(-1px);
+}
+
+.btn-pagar:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-pagar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.alert-success {
+    display: flex;
+    align-items: center;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 8px;
+    color: #065f46;
+    font-size: 0.875rem;
+    padding: 0.75rem 1rem;
+}

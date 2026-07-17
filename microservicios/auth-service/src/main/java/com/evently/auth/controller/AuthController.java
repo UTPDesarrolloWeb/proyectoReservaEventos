@@ -2,6 +2,8 @@ package com.evently.auth.controller;
 
 import com.evently.auth.dto.LoginRequest;
 import com.evently.auth.dto.RegisterRequest;
+import com.evently.auth.dto.Verify2faRequest;
+import com.evently.auth.dto.GoogleLoginRequest;
 import com.evently.auth.model.Usuario;
 import com.evently.auth.repository.UsuarioRepository;
 import com.evently.auth.service.AuthService;
@@ -42,6 +44,16 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @PostMapping("/login/verify-2fa")
+    public ResponseEntity<Map<String, Object>> verify2fa(@Valid @RequestBody Verify2faRequest request) {
+        return ResponseEntity.ok(authService.verify2fa(request));
+    }
+
+    @PostMapping("/login/google")
+    public ResponseEntity<Map<String, Object>> loginGoogle(@Valid @RequestBody GoogleLoginRequest request) {
+        return ResponseEntity.ok(authService.loginGoogle(request));
+    }
+
     @GetMapping("/perfil")
     public ResponseEntity<Usuario> miPerfil(Authentication authentication) {
         Usuario usuario = usuarioRepository.findByEmail(authentication.getName())
@@ -57,6 +69,7 @@ public class AuthController {
 
         usuario.setNombre(usuarioActualizado.getNombre());
         usuario.setApellido(usuarioActualizado.getApellido());
+        usuario.setTelefono(usuarioActualizado.getTelefono());
 
         return ResponseEntity.ok(usuarioRepository.save(usuario));
     }

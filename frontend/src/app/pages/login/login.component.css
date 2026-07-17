@@ -164,4 +164,69 @@
 .link:hover {
   text-decoration: underline;
 }
+
+.btn-secondary {
+  width: 100%;
+  height: 2.5rem;
+  background-color: #ffffff;
+  color: #030213;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  margin-top: 0.75rem;
+}
+
+.btn-secondary:hover {
+  background-color: #f3f3f5;
+}
+
+.otp-input {
+  text-align: center !important;
+  letter-spacing: 0.3rem;
+  font-size: 1.5rem !important;
+  font-weight: bold;
+  height: 3rem !important;
+  width: 100% !important;
+  min-width: 220px;
+  box-sizing: border-box;
+}
+
+.divider-container {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.25rem 0;
+}
+
+.divider-container::before,
+.divider-container::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.divider-text {
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  color: #717182;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+#google-btn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
 

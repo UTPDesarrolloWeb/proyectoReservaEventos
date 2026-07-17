@@ -43,6 +43,12 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean activo = true;
 
+    @Column(name = "telefono")
+    private String telefono;
+
+    @Column(name = "proveedor", nullable = true)
+    private String proveedor = "LOCAL"; // LOCAL | GOOGLE
+
     @PrePersist
     public void prePersist() {
         this.fechaRegistro = LocalDateTime.now();

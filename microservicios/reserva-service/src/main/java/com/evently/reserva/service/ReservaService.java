@@ -1,11 +1,15 @@
 package com.evently.reserva.service;
 
+import com.evently.reserva.client.AuthClient;
 import com.evently.reserva.client.EventoClient;
+import com.evently.reserva.client.NotificacionClient;
 import com.evently.reserva.dto.EventoDTO;
 import com.evently.reserva.dto.UsuarioDTO;
 import com.evently.reserva.model.EstadoReserva;
 import com.evently.reserva.model.Reserva;
 import com.evently.reserva.repository.ReservaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,10 +17,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ReservaService {
+
+    private static final Logger log = LoggerFactory.getLogger(ReservaService.class);
+    private static final java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newCachedThreadPool();
+
     @Autowired
     private ReservaRepository reservaRepository;
 
@@ -25,6 +35,12 @@ public class ReservaService {
 
     @Autowired
     private QRService qrService;
+
+    @Autowired
+    private AuthClient authClient;
+
+    @Autowired
+    private NotificacionClient notificacionClient;
 
     public Reserva crearReserva(Long eventoId, int cantidadEntradas, UsuarioDTO cliente) {
 
@@ -38,8 +54,10 @@ public class ReservaService {
             throw new RuntimeException("No hay suficientes entradas disponibles");
         }
 
-        if (reservaRepository.existsByClienteIdAndEventoId(cliente.getId(), eventoId)) {
-            throw new RuntimeException("Ya tienes una reserva para este evento");
+        if (reservaRepository.existsByClienteIdAndEventoIdAndEstadoIn(
+                cliente.getId(), eventoId,
+                java.util.List.of(EstadoReserva.PENDIENTE, EstadoReserva.CONFIRMADA))) {
+            throw new RuntimeException("Ya tienes una reserva activa para este evento");
         }
 
         // Reduce el aforo disponible para el evento a través del Feign client
@@ -70,7 +88,37 @@ public class ReservaService {
         );
 
         reserva.setCodigoQR(qrService.generarQR(contenidoQR));
-        return reservaRepository.save(reserva);
+        Reserva reservaConfirmada = reservaRepository.save(reserva);
+
+        // Enviar notificación WhatsApp + correo de confirmación de reserva en segundo plano
+        executor.submit(() -> {
+            try {
+                UsuarioDTO usuario = authClient.obtenerUsuarioPorId(reserva.getClienteId());
+                String telefono = usuario != null ? usuario.getTelefono() : null;
+                String email = usuario != null ? usuario.getEmail() : null;
+
+                String mensaje = String.format(
+                        "✅ ¡Reserva confirmada!\n\n📋 Reserva #%d\n🎫 Evento: %s\n🎟️ Entradas: %d\n💰 Total: $%.2f\n\n¡Disfruta el evento! 🎉",
+                        reserva.getId(),
+                        evento.getTitulo(),
+                        reserva.getCantidadEntradas(),
+                        reserva.getMontoTotal()
+                );
+
+                Map<String, Object> notifRequest = new HashMap<>();
+                notifRequest.put("usuarioId", reserva.getClienteId());
+                notifRequest.put("mensaje", mensaje);
+                notifRequest.put("tipo", "CONFIRMACION_RESERVA");
+                notifRequest.put("telefono", telefono);
+
+                notificacionClient.enviarWhatsApp(notifRequest);
+                log.info("📱 Notificación WhatsApp + correo enviados para reserva #{}", reservaId);
+            } catch (Exception e) {
+                log.warn("⚠️ No se pudo enviar notificación para reserva #{}: {}", reservaId, e.getMessage());
+            }
+        });
+
+        return reservaConfirmada;
     }
 
     public Reserva cancelarReserva(Long reservaId, UsuarioDTO cliente) {
@@ -115,3 +163,4 @@ public class ReservaService {
         return reservaRepository.findByClienteId(cliente.getId(), pageable);
     }
 }
+
