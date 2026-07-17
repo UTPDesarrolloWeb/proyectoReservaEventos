@@ -24,6 +24,9 @@ export class EventoDetalleComponent implements OnInit {
     reservaError = '';
     cantidadEntradas = 1;
 
+    mostrarModalPago = false;
+    reservaCreada: any = null;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -57,7 +60,9 @@ export class EventoDetalleComponent implements OnInit {
         this.reservaError = '';
 
         this.reservaService.crearReserva(this.evento.id, this.cantidadEntradas).subscribe({
-            next: () => {
+            next: (data: any) => {
+                this.reservaCreada = data;
+                this.mostrarModalPago = true;
                 this.reservaExito = true;
                 this.reservando = false;
             },
@@ -66,6 +71,16 @@ export class EventoDetalleComponent implements OnInit {
                 this.reservando = false;
             }
         });
+    }
+
+    cerrarModal() {
+        this.mostrarModalPago = false;
+    }
+
+    procesarPagoMock() {
+        console.log('Procesando pago para la reserva :', this.reservaCreada.id);
+        this.mostrarModalPago = false;
+        this.router.navigate(['/mis-reservas']);
     }
 
     formatearFecha(fecha: string): string {

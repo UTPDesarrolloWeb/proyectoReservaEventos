@@ -32,7 +32,7 @@ public class PagoController {
 
     // Procesar un pago
     @PostMapping("/reserva/{reservaId}")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<Pago> procesarPago(
             @PathVariable Long reservaId,
             @RequestParam MetodoPago metodo,
@@ -44,7 +44,7 @@ public class PagoController {
 
     // Procesa el reembolso
     @PutMapping("/reembolso/{reservaId}")
-    @PreAuthorize("hasRole('CLIENTE')")
+    @PreAuthorize("hasAuthority('CLIENTE')")
     public ResponseEntity<Pago> procesarReembolso(@PathVariable Long reservaId) {
         return ResponseEntity.ok(pagoService.procesarReembolso(reservaId));
     }
